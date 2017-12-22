@@ -9,17 +9,21 @@ from keras.layers.convolutional_recurrent import ConvLSTM2D
 from keras.layers.normalization import BatchNormalization
 import numpy as np
 
+from keras import backend as K
+K.set_image_dim_ordering('tf')
+
 NB_CLASSES = 100
 IMG_WIDTH = 40
 IMG_HEIGHT = 40
 IMG_CHANNELS = 1
+IMG_FRAMES = 1000
 
 # We create a layer which take as input movies of shape
 # (n_frames, width, height, channels) and returns the categorical label
 
 seq = Sequential()
 seq.add(ConvLSTM2D(filters=40, kernel_size=(3, 3),
-                   input_shape=(None, IMG_WIDTH, IMG_HEIGHT, IMG_CHANNELS),
+                   input_shape=(IMG_FRAMES, IMG_WIDTH, IMG_HEIGHT, IMG_CHANNELS),
                    padding='same', return_sequences=True))
 seq.add(BatchNormalization())
 
@@ -35,9 +39,7 @@ seq.add(ConvLSTM2D(filters=40, kernel_size=(3, 3),
                    padding='same', return_sequences=True))
 seq.add(BatchNormalization())
 
-seq.add(Conv3D(filters=1, kernel_size=(3, 3, 3)))
-
-seq.add(Conv3D(filters=1, kernel_size=(3, 3, 3)))
+seq.add(Conv3D(filters=10, kernel_size=(3, 3, 3)))
 
 seq.add(Flatten())
 

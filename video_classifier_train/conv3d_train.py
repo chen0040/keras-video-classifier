@@ -17,6 +17,8 @@ def main():
     model_dir_path = './models/UCF-101'
     weight_file_path = model_dir_path + '/conv3d-weights.h5'
     architecture_file_path = model_dir_path + '/conv3d-architecture.json'
+    nb_classes = MAX_NB_CLASSES
+
     np.random.seed(42)
 
     max_frames = 0
@@ -31,36 +33,37 @@ def main():
         min_frames = min(frames, min_frames)
     for i in range(len(x_samples)):
         x = x_samples[i]
-        x_samples[i] = x[0:min_frames, :, :, :] / 255
+        x = x[0:min_frames, :, :, :] / 255
+        x = np.reshape(x, newshape=(img_width, img_height, img_channel, min_frames))
+        x_samples[i] = x
     for y in y_samples:
         if y not in labels:
             labels[y] = len(labels)
     for i in range(len(y_samples)):
         y_samples[i] = labels[y_samples[i]]
 
-    y_samples = np_utils.to_categorical(y_samples, MAX_NB_CLASSES)
+    y_samples = np_utils.to_categorical(y_samples, nb_classes)
 
     model = Sequential()
-    model.add(Conv3D(filters=32, kernel_size=(3, 3, 3), input_shape=(min_frames, img_width, img_height, img_channel), padding='same'))
+    model.add(Conv3D(filters=32, kernel_size=(3, 3, 3), input_shape=(img_width, img_height, img_channel, min_frames)
+                     , padding='same'))
     model.add(Activation('relu'))
-    model.add(MaxPool3D(pool_size=2))
     model.add(Conv3D(filters=32, kernel_size=(3, 3, 3), padding='same'))
     model.add(Activation('relu'))
-    model.add(MaxPool3D(pool_size=2))
     model.add(Conv3D(filters=64, kernel_size=(3, 3, 3), padding='same'))
     model.add(Activation('relu'))
-    model.add(MaxPool3D(pool_size=2))
     model.add(Flatten())
     model.add(Dense(64, activation='relu'))
     model.add(Dropout(0.5))
-    model.add(Dense(activation='softmax'))
+    model.add(Dense(nb_classes, activation='softmax'))
 
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     open(architecture_file_path, 'w').write(model.to_json())
     Xtrain, Xtest, Ytrain, Ytest = train_test_split(x_samples, y_samples, test_size=0.2, random_state=42)
 
     checkpoint = ModelCheckpoint(filepath=weight_file_path, save_best_only=True)
-    model.fit(x=Xtrain, y=Ytrain, batch_size=BATCH_SIZE,epochs=EPOCHS, verbose=VERBOSE,validation_data=(Xtest, Ytest),
+    model.fit(x=np.array(Xtrain), y=np.array(Ytrain), batch_size=BATCH_SIZE,epochs=EPOCHS, verbose=VERBOSE,
+              validation_data=(np.array(Xtest), np.array(Ytest)),
               callbacks=[checkpoint])
     model.save_weights(weight_file_path)
 

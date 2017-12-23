@@ -24,7 +24,7 @@ def extract_images(video_input_file_path, image_output_dir_path):
 
 def extract_features(video_input_file_path, feature_output_file_path):
     if os.path.exists(feature_output_file_path):
-        return np.load(feature_output_file_path).item()
+        return np.load(feature_output_file_path)
     count = 0
     print('Extracting frames from video: ', video_input_file_path)
     vidcap = cv2.VideoCapture(video_input_file_path)

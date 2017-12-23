@@ -35,7 +35,7 @@ def download_ucf(data_dir_path):
 
 
 def load_ucf(data_dir_path):
-    UFC101_data_dir_path = data_dir_path + "/UCF101"
+    UFC101_data_dir_path = data_dir_path + "/UCF-101"
     if not os.path.exists(UFC101_data_dir_path):
         download_ucf(data_dir_path)
 

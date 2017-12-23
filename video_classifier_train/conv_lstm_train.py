@@ -60,7 +60,6 @@ def main():
     for i in range(len(x_samples)):
         x = x_samples[i]
         x = x[0:min_frames, :, :, :] / 255
-        x = np.reshape(x, newshape=(img_width, img_height, img_channel, min_frames))
         x_samples[i] = x
     for y in y_samples:
         if y not in labels:
@@ -75,7 +74,7 @@ def main():
 
     model = Sequential()
     model.add(ConvLSTM2D(filters=40, kernel_size=(3, 3),
-                         input_shape=(img_width, img_height, img_channel, min_frames),
+                         input_shape=(None, img_width, img_height, img_channel),
                          padding='same', return_sequences=True))
     model.add(BatchNormalization())
 
@@ -91,13 +90,13 @@ def main():
                          padding='same', return_sequences=True))
     model.add(BatchNormalization())
 
-    model.add(Conv3D(filters=10, kernel_size=(3, 3, 3)))
+    model.add(Conv3D(filters=nb_classes, kernel_size=(3, 3, 3),
+                     activation='softmax',
+                     padding='same', data_format='channels_last'))
 
-    model.add(Flatten())
+    # model.add(Dense(nb_classes))
 
-    model.add(Dense(nb_classes))
-
-    model.add(Activation('softmax'))
+    # model.add(Activation('softmax'))
 
     model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=['accuracy'])
     open(architecture_file_path, 'w').write(model.to_json())

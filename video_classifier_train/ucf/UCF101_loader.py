@@ -2,10 +2,7 @@ import urllib.request
 import os
 import sys
 import patoolib
-import numpy as np
 
-DATA_DIR_PATH = '../very_large_data'
-UFC101_DATA_DIR_PATH = DATA_DIR_PATH + "/UCF101"
 URL_LINK = 'http://crcv.ucf.edu/data/UCF101/UCF101.rar'
 
 
@@ -22,11 +19,11 @@ def reporthook(block_num, block_size, total_size):
         sys.stderr.write("read %d\n" % (read_so_far,))
 
 
-def download_ucf():
-    ucf_rar = DATA_DIR_PATH + '/UCF101.rar'
+def download_ucf(data_dir_path):
+    ucf_rar = data_dir_path + '/UCF101.rar'
 
-    if not os.path.exists(DATA_DIR_PATH):
-        os.makedirs(DATA_DIR_PATH)
+    if not os.path.exists(data_dir_path):
+        os.makedirs(data_dir_path)
 
     if not os.path.exists(ucf_rar):
         print('ucf file does not exist, downloading from internet')
@@ -34,22 +31,18 @@ def download_ucf():
                                    reporthook=reporthook)
 
     print('unzipping ucf file')
-    patoolib.extract_archive(ucf_rar, outdir=DATA_DIR_PATH)
+    patoolib.extract_archive(ucf_rar, outdir=data_dir_path)
 
 
-def load_ucf():
-    if not os.path.exists(UFC101_DATA_DIR_PATH):
-        download_ucf()
-
-
-class UCF101(object):
-
-    def __init__(self):
-        load_ucf()
+def load_ucf(data_dir_path):
+    UFC101_data_dir_path = data_dir_path + "/UCF101"
+    if not os.path.exists(UFC101_data_dir_path):
+        download_ucf(data_dir_path)
 
 
 def main():
-    load_ucf()
+    data_dir_path = '../very_large_data'
+    load_ucf(data_dir_path)
 
 
 if __name__ == '__main__':

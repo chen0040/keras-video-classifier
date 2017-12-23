@@ -1,11 +1,11 @@
 import urllib.request
 import os
 import sys
-import rarfile
+import patoolib
 import numpy as np
 
 DATA_DIR_PATH = '../very_large_data'
-UFC101_MODEL = DATA_DIR_PATH + "/medium.avi"
+UFC101_DATA_DIR_PATH = DATA_DIR_PATH + "/UCF101"
 URL_LINK = 'http://crcv.ucf.edu/data/UCF101/UCF101.rar'
 
 
@@ -34,24 +34,22 @@ def download_ucf():
                                    reporthook=reporthook)
 
     print('unzipping ucf file')
-    rar_ref = rarfile.RarFile(ucf_rar, 'r')
-    rar_ref.extractall(DATA_DIR_PATH)
-    rar_ref.close()
+    patoolib.extract_archive(ucf_rar, outdir=DATA_DIR_PATH)
 
 
 def load_ucf():
-    if not os.path.exists(UFC101_MODEL):
+    if not os.path.exists(UFC101_DATA_DIR_PATH):
         download_ucf()
 
 
 class UCF101(object):
 
     def __init__(self):
-        pass
+        load_ucf()
 
 
 def main():
-    download_ucf()
+    load_ucf()
 
 
 if __name__ == '__main__':

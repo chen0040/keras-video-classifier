@@ -5,5 +5,5 @@ numpy
 nltk
 h5py
 pillow
-rarfile
+patool
 tensorflow

@@ -6,4 +6,5 @@ nltk
 h5py
 pillow
 patool
+opencv-python
 tensorflow

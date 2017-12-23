@@ -36,6 +36,7 @@ def extract_features(video_input_file_path, feature_output_file_path):
         success, image = vidcap.read()
         # print('Read a new frame: ', success)
         if success:
+            img = cv2.resize(image, (40, 40), interpolation=cv2.INTER_AREA)
             features.append(image)
             count = count + 1
     unscaled_features = np.array(features)

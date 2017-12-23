@@ -5,7 +5,7 @@ generated movie which contains moving squares.
 from keras import backend as K
 from keras.callbacks import ModelCheckpoint
 from keras.models import Sequential
-from keras.layers import Flatten, Dense, Activation
+from keras.layers import Flatten, Dense, Activation, Input
 from keras.layers.recurrent import LSTM
 from keras.utils import np_utils
 from keras.preprocessing.sequence import pad_sequences
@@ -17,9 +17,10 @@ from sklearn.model_selection import train_test_split
 BATCH_SIZE = 64
 NUM_EPOCHS = 20
 VERBOSE = 1
-HIDDEN_UNITS = 64
+HIDDEN_UNITS = 256
 
 K.set_image_dim_ordering('tf')
+
 
 def generate_batch(x_samples, y_samples):
     num_batches = len(x_samples) // BATCH_SIZE
@@ -28,7 +29,7 @@ def generate_batch(x_samples, y_samples):
         for batchIdx in range(0, num_batches):
             start = batchIdx * BATCH_SIZE
             end = (batchIdx + 1) * BATCH_SIZE
-            yield np.array(x_samples[start:end]), np.array(y_samples[start:end])
+            yield x_samples[start:end], y_samples[start:end]
 
 
 def main():
@@ -52,6 +53,7 @@ def main():
     for y in y_samples:
         if y not in labels:
             labels[y] = len(labels)
+    print(labels)
     for i in range(len(y_samples)):
         y_samples[i] = labels[y_samples[i]]
 
@@ -62,10 +64,9 @@ def main():
 
     model = Sequential()
 
-    model.add(LSTM(units=HIDDEN_UNITS, input_shape=(max_frames, num_input_tokens), return_sequences=False, dropout=0.2,
-                   recurrent_dropout=0.2))
+    model.add(LSTM(units=HIDDEN_UNITS, input_shape=(max_frames, num_input_tokens), return_sequences=False))
 
-    model.add(Flatten())
+    model.add(Dense(256))
 
     model.add(Dense(nb_classes))
 

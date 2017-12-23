@@ -5,7 +5,7 @@ from keras.applications.vgg16 import VGG16, preprocess_input, decode_predictions
 from keras.preprocessing.image import img_to_array
 from keras.optimizers import SGD
 
-MAX_NB_CLASSES = 4
+MAX_NB_CLASSES = 6
 
 
 def extract_vgg16_features(model, video_input_file_path, feature_output_file_path):
@@ -27,7 +27,6 @@ def extract_vgg16_features(model, video_input_file_path, feature_output_file_pat
             input = np.expand_dims(input, axis=0)
             input = preprocess_input(input)
             feature = model.predict(input)[0]
-            print(feature.shape)
             features.append(feature)
             count = count + 1
     unscaled_features = np.array(features)

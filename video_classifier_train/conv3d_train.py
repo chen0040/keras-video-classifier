@@ -8,9 +8,10 @@ from video_classifier_train.ucf.UCF101_loader import load_ucf
 from video_classifier_train.ucf.UCF101_extractor import scan_and_extract_features, MAX_NB_CLASSES
 from sklearn.model_selection import train_test_split
 
-BATCH_SIZE = 64
+BATCH_SIZE = 8
 EPOCHS = 20
 VERBOSE = 1
+
 
 def main():
     data_dir_path = './very_large_data'
@@ -62,7 +63,7 @@ def main():
     Xtrain, Xtest, Ytrain, Ytest = train_test_split(x_samples, y_samples, test_size=0.2, random_state=42)
 
     checkpoint = ModelCheckpoint(filepath=weight_file_path, save_best_only=True)
-    model.fit(x=np.array(Xtrain), y=np.array(Ytrain), batch_size=BATCH_SIZE,epochs=EPOCHS, verbose=VERBOSE,
+    model.fit(x=np.array(Xtrain), y=np.array(Ytrain), batch_size=BATCH_SIZE, epochs=EPOCHS, verbose=VERBOSE,
               validation_data=(np.array(Xtest), np.array(Ytest)),
               callbacks=[checkpoint])
     model.save_weights(weight_file_path)

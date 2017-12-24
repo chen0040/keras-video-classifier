@@ -23,22 +23,40 @@ MAX_ALLOWED_FRAMES = 20
 K.set_image_dim_ordering('tf')
 
 
-def generate_batch(x_samples, y_samples):
-    num_batches = len(x_samples) // BATCH_SIZE
+class VGG16LSTMVideoClassifier(object):
 
-    while True:
-        for batchIdx in range(0, num_batches):
-            start = batchIdx * BATCH_SIZE
-            end = (batchIdx + 1) * BATCH_SIZE
-            yield np.array(x_samples[start:end]), y_samples[start:end]
+    num_input_tokens = None
+    nb_classes = None
+    labels = None
+
+    def __init__(self):
+        pass
+
+    def load_model(self, config_file_path, weight_file_path):
+
+        config = np.load(config_file_path).items()
+        self.num_input_tokens = config['num_input_tokens']
+        self.nb_classes = config['nb_classes']
+        self.labels = config['labels']
+
+        model = Sequential()
+
+        model.add(LSTM(units=HIDDEN_UNITS, input_shape=(None, self.num_input_tokens), return_sequences=False, dropout=0.5))
+        model.add(Dense(512, activation='relu'))
+        model.add(Dropout(0.5))
+
+        model.add(Dense(self.nb_classes))
+
+        model.add(Activation('softmax'))
+
+        model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+        model.load_weights(weight_file_path)
 
 
 def main():
-    data_dir_path = './very_large_data'
-    model_dir_path = './models/UCF-101'
-    config_file_path = model_dir_path + '/vgg16-lstm-config.npy'
+    data_dir_path = '../video_classifier_train/very_large_data'
+    model_dir_path = '../video_classifier_train/models/UCF-101'
     weight_file_path = model_dir_path + '/vgg16-lstm-weights.h5'
-    architecture_file_path = model_dir_path + '/vgg16-lstm-architecture.json'
     nb_classes = MAX_NB_CLASSES
 
     np.random.seed(42)
@@ -70,17 +88,7 @@ def main():
         if y not in labels:
             labels[y] = len(labels)
     print(labels)
-    for i in range(len(y_samples)):
-        y_samples[i] = labels[y_samples[i]]
-
-    y_samples = np_utils.to_categorical(y_samples, nb_classes)
-
-    config = dict()
-    config['labels'] = labels
-    config['nb_classes'] = nb_classes
-    config['num_input_tokens'] = num_input_tokens
-
-    np.save(config_file_path, config)
+    labels_idx2word = dict([(idx, word) for word, idx in labels.items()])
 
     model = Sequential()
 
@@ -93,20 +101,13 @@ def main():
     model.add(Activation('softmax'))
 
     model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-    open(architecture_file_path, 'w').write(model.to_json())
-    Xtrain, Xtest, Ytrain, Ytest = train_test_split(x_samples, y_samples, test_size=0.3, random_state=42)
+    model.load_weights(weight_file_path)
 
-    train_gen = generate_batch(Xtrain, Ytrain)
-    test_gen = generate_batch(Xtest, Ytest)
-
-    train_num_batches = len(Xtrain) // BATCH_SIZE
-    test_num_batches = len(Xtest) // BATCH_SIZE
-
-    checkpoint = ModelCheckpoint(filepath=weight_file_path, save_best_only=True)
-    model.fit_generator(generator=train_gen, steps_per_epoch=train_num_batches,
-                        epochs=NUM_EPOCHS,
-                        verbose=1, validation_data=test_gen, validation_steps=test_num_batches, callbacks=[checkpoint])
-    model.save_weights(weight_file_path)
+    for i in range(len(x_samples)):
+        x = x_samples[i]
+        predicted_class = np.argmax(model.predict(np.array([x]))[0])
+        predicted_label = labels_idx2word[predicted_class]
+        print('predicted: ' + predicted_label + ' actual: ' + y_samples[i])
 
 
 if __name__ == '__main__':

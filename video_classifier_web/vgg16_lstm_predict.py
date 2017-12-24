@@ -92,7 +92,11 @@ def main():
 
     videos = scan_ucf(data_dir_path, predictor.nb_classes)
 
-    for video_file_path, label in videos.items():
+    video_file_path_list = np.array([file_path for file_path in videos.keys()])
+    np.random.shuffle(video_file_path_list)
+
+    for video_file_path in video_file_path_list:
+        label = videos[video_file_path]
         predicted_label = predictor.predict(video_file_path)
         print('predicted: ' + predicted_label + ' actual: ' + label)
 

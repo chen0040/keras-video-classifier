@@ -4,15 +4,13 @@ generated movie which contains moving squares.
 """
 import numpy as np
 from keras import backend as K
-from keras.callbacks import ModelCheckpoint
 from keras.layers import Dense, Activation, Dropout
 from keras.layers.recurrent import LSTM
 from keras.models import Sequential
-from keras.utils import np_utils
-from sklearn.model_selection import train_test_split
+from keras.applications.vgg16 import VGG16
 
-from video_classifier_train.ucf.UCF101_loader import load_ucf
-from video_classifier_train.ucf.UCF101_vgg16_feature_extractor import scan_and_extract_vgg16_features, MAX_NB_CLASSES
+from video_classifier_train.ucf.UCF101_loader import load_ucf, scan_ucf
+from video_classifier_train.ucf.UCF101_vgg16_feature_extractor import extract_vgg16_features_live
 
 BATCH_SIZE = 64
 NUM_EPOCHS = 20
@@ -28,6 +26,10 @@ class VGG16LSTMVideoClassifier(object):
     num_input_tokens = None
     nb_classes = None
     labels = None
+    labels_idx2word = None
+    model = None
+    vgg16_model = None
+    expected_frames = None
 
     def __init__(self):
         pass
@@ -38,6 +40,8 @@ class VGG16LSTMVideoClassifier(object):
         self.num_input_tokens = config['num_input_tokens']
         self.nb_classes = config['nb_classes']
         self.labels = config['labels']
+        self.expected_frames = config['expected_frames']
+        self.labels_idx2word = dict([(idx, word) for word, idx in self.labels.items()])
 
         model = Sequential()
 
@@ -52,62 +56,44 @@ class VGG16LSTMVideoClassifier(object):
         model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
         model.load_weights(weight_file_path)
 
+        self.model = model
+
+        vgg16_model = VGG16(include_top=True, weights='imagenet')
+        vgg16_model.compile(optimizer=SGD(), loss='categorical_crossentropy', metrics=['accuracy'])
+        self.vgg16_model = vgg16_model
+
+    def predict(self, video_file_path):
+        x = extract_vgg16_features_live(self.vgg16_model, video_file_path)
+        frames = x.shape[0]
+        if frames > self.expected_frames:
+            x = x[0:self.expected_frames, :]
+        elif frames < self.expected_frames:
+            temp = np.zeros(shape=(self.expected_frames, x.shape[1]))
+            temp[0:frames, :] = x
+            x = temp
+        predicted_class = np.argmax(self.model.predict(np.array([x]))[0])
+        predicted_label = self.labels_idx2word[predicted_class]
+        return predicted_label
+
 
 def main():
     data_dir_path = '../video_classifier_train/very_large_data'
     model_dir_path = '../video_classifier_train/models/UCF-101'
+    config_file_path = model_dir_path + '/vgg16-lstm-config.npy'
     weight_file_path = model_dir_path + '/vgg16-lstm-weights.h5'
-    nb_classes = MAX_NB_CLASSES
 
     np.random.seed(42)
 
-    max_frames = 0
-    labels = dict()
     load_ucf(data_dir_path)
-    x_samples, y_samples = scan_and_extract_vgg16_features(data_dir_path)
-    num_input_tokens = x_samples[0].shape[1]
-    frames_list = []
-    for x in x_samples:
-        frames = x.shape[0]
-        frames_list.append(frames)
-        max_frames = max(frames, max_frames)
-    expected_frames = int(np.mean(frames_list))
-    print('max frames: ', max_frames)
-    print('expected frames: ', expected_frames)
-    for i in range(len(x_samples)):
-        x = x_samples[i]
-        frames = x.shape[0]
-        if frames > expected_frames:
-            x = x[0:expected_frames, :]
-            x_samples[i] = x
-        elif frames < expected_frames:
-            temp = np.zeros(shape=(expected_frames, x.shape[1]))
-            temp[0:frames, :] = x
-            x_samples[i] = temp
-    for y in y_samples:
-        if y not in labels:
-            labels[y] = len(labels)
-    print(labels)
-    labels_idx2word = dict([(idx, word) for word, idx in labels.items()])
 
-    model = Sequential()
+    predictor = VGG16LSTMVideoClassifier()
+    predictor.load_model(config_file_path, weight_file_path)
 
-    model.add(LSTM(units=HIDDEN_UNITS, input_shape=(None, num_input_tokens), return_sequences=False, dropout=0.5))
-    model.add(Dense(512, activation='relu'))
-    model.add(Dropout(0.5))
+    videos = scan_ucf(data_dir_path, predictor.nb_classes)
 
-    model.add(Dense(nb_classes))
-
-    model.add(Activation('softmax'))
-
-    model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-    model.load_weights(weight_file_path)
-
-    for i in range(len(x_samples)):
-        x = x_samples[i]
-        predicted_class = np.argmax(model.predict(np.array([x]))[0])
-        predicted_label = labels_idx2word[predicted_class]
-        print('predicted: ' + predicted_label + ' actual: ' + y_samples[i])
+    for video_file_path, label in videos.items():
+        predicted_label = predictor.predict(video_file_path)
+        print('predicted: ' + predicted_label + ' actual: ' + label)
 
 
 if __name__ == '__main__':

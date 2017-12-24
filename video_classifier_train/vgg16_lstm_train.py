@@ -79,6 +79,7 @@ def main():
     config['labels'] = labels
     config['nb_classes'] = nb_classes
     config['num_input_tokens'] = num_input_tokens
+    config['expected_frames'] = expected_frames
 
     np.save(config_file_path, config)
 

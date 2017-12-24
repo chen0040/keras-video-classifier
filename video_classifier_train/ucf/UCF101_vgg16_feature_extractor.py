@@ -8,6 +8,28 @@ from keras.optimizers import SGD
 MAX_NB_CLASSES = 20
 
 
+def extract_vgg16_features_live(model, video_input_file_path):
+    print('Extracting frames from video: ', video_input_file_path)
+    vidcap = cv2.VideoCapture(video_input_file_path)
+    success, image = vidcap.read()
+    features = []
+    success = True
+    while success:
+        vidcap.set(cv2.CAP_PROP_POS_MSEC, (count * 1000))  # added this line
+        success, image = vidcap.read()
+        # print('Read a new frame: ', success)
+        if success:
+            img = cv2.resize(image, (224, 224), interpolation=cv2.INTER_AREA)
+            input = img_to_array(img)
+            input = np.expand_dims(input, axis=0)
+            input = preprocess_input(input)
+            feature = model.predict(input)[0]
+            features.append(feature)
+            count = count + 1
+    unscaled_features = np.array(features)
+    return unscaled_features
+
+
 def extract_vgg16_features(model, video_input_file_path, feature_output_file_path):
     if os.path.exists(feature_output_file_path):
         return np.load(feature_output_file_path)

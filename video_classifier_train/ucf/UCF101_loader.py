@@ -34,6 +34,24 @@ def download_ucf(data_dir_path):
     patoolib.extract_archive(ucf_rar, outdir=data_dir_path)
 
 
+def scan_ucf(data_dir_path, limit):
+    input_data_dir_path = data_dir_path + '/UCF-101'
+
+    result = dict()
+
+    dir_count = 0
+    for f in os.listdir(input_data_dir_path):
+        file_path = input_data_dir_path + os.path.sep + f
+        if not os.path.isfile(file_path):
+            dir_count += 1
+            for ff in os.listdir(file_path):
+                video_file_path = file_path + os.path.sep + ff
+                result[video_file_path] = f
+        if dir_count == limit:
+            break
+    return result
+
+
 def load_ucf(data_dir_path):
     UFC101_data_dir_path = data_dir_path + "/UCF-101"
     if not os.path.exists(UFC101_data_dir_path):

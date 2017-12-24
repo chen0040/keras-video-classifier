@@ -12,6 +12,15 @@ BATCH_SIZE = 8
 EPOCHS = 20
 VERBOSE = 1
 
+def generate_batch(x_samples, y_samples):
+    num_batches = len(x_samples) // BATCH_SIZE
+
+    while True:
+        for batchIdx in range(0, num_batches):
+            start = batchIdx * BATCH_SIZE
+            end = (batchIdx + 1) * BATCH_SIZE
+            yield np.array(x_samples[start:end]), np.array(y_samples[start:end])
+
 
 def main():
     data_dir_path = './very_large_data'
@@ -62,10 +71,16 @@ def main():
     open(architecture_file_path, 'w').write(model.to_json())
     Xtrain, Xtest, Ytrain, Ytest = train_test_split(x_samples, y_samples, test_size=0.2, random_state=42)
 
+    train_gen = generate_batch(Xtrain, Ytrain)
+    test_gen = generate_batch(Xtest, Ytest)
+
+    train_num_batches = len(Xtrain) // BATCH_SIZE
+    test_num_batches = len(Xtest) // BATCH_SIZE
+
     checkpoint = ModelCheckpoint(filepath=weight_file_path, save_best_only=True)
-    model.fit(x=np.array(Xtrain), y=np.array(Ytrain), batch_size=BATCH_SIZE, epochs=EPOCHS, verbose=VERBOSE,
-              validation_data=(np.array(Xtest), np.array(Ytest)),
-              callbacks=[checkpoint])
+    model.fit_generator(generator=train_gen, steps_per_epoch=train_num_batches,
+                        epochs=NUM_EPOCHS,
+                        verbose=1, validation_data=test_gen, validation_steps=test_num_batches, callbacks=[checkpoint])
     model.save_weights(weight_file_path)
 
 

@@ -10,8 +10,10 @@ IMG_HEIGHT = 40
 IMG_CHANNELS = 1
 IMG_FRAMES = 1000
 
-img_input = Input(shape=(IMG_FRAMES, IMG_WIDTH, IMG_HEIGHT, IMG_CHANNELS))
+img_input = Input(shape=(None, IMG_WIDTH, IMG_HEIGHT, IMG_CHANNELS))
 base_cnn_model = InceptionV3(include_top=False)
+for layer in base_cnn_model.layers:
+    layer.trainable = False
 temporal_analysis = TimeDistributed(base_cnn_model)(img_input)
 conv3d_analysis = Conv3D(NB_FILTERS, 3, 3, 3)(temporal_analysis)
 conv3d_analysis = Conv3D(NB_FILTERS, 3, 3, 3)(conv3d_analysis)

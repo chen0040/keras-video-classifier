@@ -2,17 +2,17 @@
 This network is used to predict the next frame of an artificially
 generated movie which contains moving squares.
 """
+import numpy as np
 from keras import backend as K
 from keras.callbacks import ModelCheckpoint
-from keras.models import Sequential
-from keras.layers import Flatten, Dense, Activation, Dropout
+from keras.layers import Dense, Activation, Dropout
 from keras.layers.recurrent import LSTM
+from keras.models import Sequential
 from keras.utils import np_utils
-from keras.preprocessing.sequence import pad_sequences
-import numpy as np
+from sklearn.model_selection import train_test_split
+
 from video_classifier_train.ucf.UCF101_loader import load_ucf
 from video_classifier_train.ucf.UCF101_vgg16_feature_extractor import scan_and_extract_vgg16_features, MAX_NB_CLASSES
-from sklearn.model_selection import train_test_split
 
 BATCH_SIZE = 64
 NUM_EPOCHS = 20
@@ -47,19 +47,22 @@ def main():
     load_ucf(data_dir_path)
     x_samples, y_samples = scan_and_extract_vgg16_features(data_dir_path)
     num_input_tokens = x_samples[0].shape[1]
+    frames_list = []
     for x in x_samples:
         frames = x.shape[0]
+        frames_list.append(frames)
         max_frames = max(frames, max_frames)
-    max_frames = min(MAX_ALLOWED_FRAMES, max_frames)
+    expected_frames = int(np.mean(frames_list))
     print('max frames: ', max_frames)
+    print('expected frames: ', expected_frames)
     for i in range(len(x_samples)):
         x = x_samples[i]
         frames = x.shape[0]
-        if frames > max_frames:
-            x = x[0:max_frames, :]
+        if frames > expected_frames:
+            x = x[0:expected_frames, :]
             x_samples[i] = x
-        elif frames < max_frames:
-            temp = np.zeros(shape=(max_frames, x.shape[1]))
+        elif frames < expected_frames:
+            temp = np.zeros(shape=(expected_frames, x.shape[1]))
             temp[0:frames, :] = x
             x_samples[i] = temp
     for y in y_samples:

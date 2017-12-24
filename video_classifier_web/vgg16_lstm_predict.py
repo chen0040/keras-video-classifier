@@ -8,6 +8,7 @@ from keras.layers import Dense, Activation, Dropout
 from keras.layers.recurrent import LSTM
 from keras.models import Sequential
 from keras.applications.vgg16 import VGG16
+from keras.optimizers import SGD
 
 from video_classifier_train.ucf.UCF101_loader import load_ucf, scan_ucf
 from video_classifier_train.ucf.UCF101_vgg16_feature_extractor import extract_vgg16_features_live
@@ -36,7 +37,7 @@ class VGG16LSTMVideoClassifier(object):
 
     def load_model(self, config_file_path, weight_file_path):
 
-        config = np.load(config_file_path).items()
+        config = np.load(config_file_path).item()
         self.num_input_tokens = config['num_input_tokens']
         self.nb_classes = config['nb_classes']
         self.labels = config['labels']

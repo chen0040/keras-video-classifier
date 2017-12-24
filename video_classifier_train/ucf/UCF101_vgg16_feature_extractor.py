@@ -14,6 +14,7 @@ def extract_vgg16_features_live(model, video_input_file_path):
     success, image = vidcap.read()
     features = []
     success = True
+    count = 0
     while success:
         vidcap.set(cv2.CAP_PROP_POS_MSEC, (count * 1000))  # added this line
         success, image = vidcap.read()

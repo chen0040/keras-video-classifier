@@ -13,3 +13,11 @@ The following deep learning models have been implemented and studied:
 * VGG16+LSTM: this approach uses VGG16 to extract features from individual frame of the video, the sequence of frame features are then taken into LSTM recurrent networks for classifier.
     * training: video_classifier_train/vgg16_lstm_train.py 
     * predictor: video_classifier_web/vgg16_lstm_predict.py
+    
+# Evaluation
+
+20 classes from UCF101 is used to train the video classifier.
+
+Below is the train history for the VGG16+LSTM:
+
+![vgg16-lstm-history](/video_classifier_train/reports/vgg16-lstm-history.png)

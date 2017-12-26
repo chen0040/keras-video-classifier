@@ -5,7 +5,7 @@ generated movie which contains moving squares.
 import numpy as np
 from keras import backend as K
 from keras.callbacks import ModelCheckpoint
-from keras.layers import Dense, Activation, Dropout
+from keras.layers import Dense, Activation, Dropout, Bidirectional
 from keras.layers.recurrent import LSTM
 from keras.models import Sequential
 from keras.utils import np_utils
@@ -38,7 +38,7 @@ def main():
     data_dir_path = './very_large_data'
     model_dir_path = './models/UCF-101'
     report_dir_path = './reports/UCF-101'
-    model_name = 'vgg16-lstm'
+    model_name = 'vgg16-bidirectional-lstm'
     config_file_path = model_dir_path + '/' + model_name + '-config.npy'
     weight_file_path = model_dir_path + '/' + model_name + '-weights.h5'
     architecture_file_path = model_dir_path + '/' + model_name + '-architecture.json'
@@ -88,7 +88,7 @@ def main():
 
     model = Sequential()
 
-    model.add(LSTM(units=HIDDEN_UNITS, input_shape=(None, num_input_tokens), return_sequences=False, dropout=0.5))
+    model.add(Bidirectional(LSTM(units=HIDDEN_UNITS, dropout=0.2, input_shape=(expected_frames, num_input_tokens))))
     model.add(Dense(512, activation='relu'))
     model.add(Dropout(0.5))
 

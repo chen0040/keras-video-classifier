@@ -24,8 +24,8 @@ The following deep learning models have been implemented and studied:
 
 Below is the train history for the VGG16+LSTM:
 
-![vgg16-lstm-history](/video_classifier_train/reports/vgg16-lstm-history.png)
+![vgg16-lstm-history](/video_classifier_train/reports/UCF-101/vgg16-lstm-history.png)
 
 Below is the train history for the VGG16+Bidirectional LSTM:
 
-![vgg16-lstm-history](/video_classifier_train/reports/vgg16-bidirectional-lstm-history.png)
+![vgg16-bidirectional-lstm-history](/video_classifier_train/reports/UCF-101/vgg16-bidirectional-lstm-history.png)

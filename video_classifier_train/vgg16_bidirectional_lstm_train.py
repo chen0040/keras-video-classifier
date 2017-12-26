@@ -5,7 +5,7 @@ generated movie which contains moving squares.
 import numpy as np
 from keras import backend as K
 from keras.callbacks import ModelCheckpoint
-from keras.layers import Dense, Activation, Dropout, Bidirectional
+from keras.layers import Dense, Activation, Dropout, Bidirectional, Embedding, SpatialDropout1D
 from keras.layers.recurrent import LSTM
 from keras.models import Sequential
 from keras.utils import np_utils
@@ -16,6 +16,7 @@ from video_classifier_train.ucf.UCF101_vgg16_feature_extractor import scan_and_e
 from video_classifier_train.utils import plot_and_save_history
 
 BATCH_SIZE = 64
+EMBEDDING_SIZE = 100
 NUM_EPOCHS = 20
 VERBOSE = 1
 HIDDEN_UNITS = 512
@@ -87,8 +88,8 @@ def main():
     np.save(config_file_path, config)
 
     model = Sequential()
-
-    model.add(Bidirectional(LSTM(units=HIDDEN_UNITS, dropout=0.2, input_shape=(expected_frames, num_input_tokens))))
+    model.add(Bidirectional(LSTM(units=HIDDEN_UNITS, return_sequences=True), input_shape=(expected_frames, num_input_tokens)))
+    model.add(Bidirectional(LSTM(10)))
     model.add(Dense(512, activation='relu'))
     model.add(Dropout(0.5))
 

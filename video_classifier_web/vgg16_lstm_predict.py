@@ -78,10 +78,11 @@ class VGG16LSTMVideoClassifier(object):
 
 
 def main():
+    model_name = 'vgg16-lstm'
     data_dir_path = '../video_classifier_train/very_large_data'
     model_dir_path = '../video_classifier_train/models/UCF-101'
-    config_file_path = model_dir_path + '/vgg16-lstm-config.npy'
-    weight_file_path = model_dir_path + '/vgg16-lstm-weights.h5'
+    config_file_path = model_dir_path + '/' + model_name + '-config.npy'
+    weight_file_path = model_dir_path + '/' + model_name + '-weights.h5'
 
     np.random.seed(42)
 

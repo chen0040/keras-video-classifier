@@ -29,3 +29,5 @@ Below is the train history for the VGG16+LSTM:
 Below is the train history for the VGG16+Bidirectional LSTM:
 
 ![vgg16-bidirectional-lstm-history](/video_classifier_train/reports/UCF-101/vgg16-bidirectional-lstm-history.png)
+
+Currently the bidirectional LSTM with VGG16 feature extractor gives the best performance (accuracy around 89% for training and 77% for validation)

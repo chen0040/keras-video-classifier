@@ -11,8 +11,8 @@ __pycache__/
 
 Thumbs.db
 
-video_classifier_web/uploads
-video_classifier_train/very_large_data
+video_classifier/video_classifier_web/uploads
+video_classifier/video_classifier_train/very_large_data
 
 # Distribution / packaging
 .Python

@@ -1,13 +1,18 @@
 from setuptools import setup
 
 setup(
-    name='video_classifier_web',
-    packages=['video_classifier_web'],
+    name='video_classifier',
+    packages=['video_classifier'],
     include_package_data=True,
     install_requires=[
         'flask',
         'keras',
-        'sklearn'
+        'tensorflow',
+        'numpy',
+        'matplotlib',
+        'opencv-python',
+        'h5py',
+        'scikit-learn'
     ],
     setup_requires=[
         'pytest-runner',

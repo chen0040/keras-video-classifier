@@ -12,11 +12,15 @@ The following deep learning models have been implemented and studied:
 
 * VGG16+LSTM: this approach uses VGG16 to extract features from individual frame of the video, the sequence of frame features are then taken into LSTM recurrent networks for classifier.
     * training: video_classifier_train/vgg16_lstm_train.py 
-    * predictor: video_classifier_web/vgg16_lstm_predict.py
+    * predictor: video_classifier_train/vgg16_lstm_predict.py
+    * training: video_classifier_train/vgg16_lstm_hi_dim_train.py (VGG16 top not included) 
+    * predictor: video_classifier_train/vgg16_lstm_hi_dim_predict.py (VGG16 top not included)
     
 * VGG16+Bidirectional LSTM: this approach uses VGG16 to extract features from individual frame of the video, the sequence of frame features are then taken into bidirectional LSTM recurrent networks for classifier.
     * training: video_classifier_train/vgg16_bidirectional_lstm_train.py 
-    * predictor: video_classifier_web/vgg16_bidirectional_lstm_predict.py
+    * predictor: video_classifier_train/vgg16_bidirectional_lstm_predict.py
+    * training: video_classifier_train/vgg16_bidirectional_lstm_hi_dim_train.py (VGG16 top not included)
+    * predictor: video_classifier_train/vgg16_bidirectional_lstm_hi_dim_predict.py (VGG16 top not included)
     
 # Evaluation
 
@@ -24,10 +28,10 @@ The following deep learning models have been implemented and studied:
 
 Below is the train history for the VGG16+LSTM:
 
-![vgg16-lstm-history](/video_classifier_train/reports/UCF-101/vgg16-lstm-history.png)
+![vgg16-lstm-history](/video_classifier/video_classifier_train/reports/UCF-101/vgg16-lstm-history.png)
 
 Below is the train history for the VGG16+Bidirectional LSTM:
 
-![vgg16-bidirectional-lstm-history](/video_classifier_train/reports/UCF-101/vgg16-bidirectional-lstm-history.png)
+![vgg16-bidirectional-lstm-history](/video_classifier/video_classifier_train/reports/UCF-101/vgg16-bidirectional-lstm-history.png)
 
 Currently the bidirectional LSTM with VGG16 feature extractor gives the best performance (accuracy around 89% for training and 77% for validation)

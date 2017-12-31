@@ -136,7 +136,7 @@ class VGG16BidirectionalLSTMVideoClassifier(object):
         self.vgg16_model.compile(optimizer=SGD(), loss='categorical_crossentropy', metrics=['accuracy'])
 
         feature_dir_name = 'UCF-101-VGG16-Features'
-        if vgg16_include_top:
+        if not vgg16_include_top:
             feature_dir_name = 'UCF-101-VGG16-HiDimFeatures'
         max_frames = 0
         self.labels = dict()
@@ -305,7 +305,7 @@ class VGG16LSTMVideoClassifier(object):
         self.vgg16_model = vgg16_model
 
         feature_dir_name = 'UCF-101-VGG16-Features'
-        if vgg16_include_top:
+        if not vgg16_include_top:
             feature_dir_name = 'UCF-101-VGG16-HiDimFeatures'
         max_frames = 0
         self.labels = dict()

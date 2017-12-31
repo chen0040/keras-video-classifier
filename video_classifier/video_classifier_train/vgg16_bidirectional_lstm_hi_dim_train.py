@@ -19,7 +19,7 @@ def main():
     history = classifier.fit(data_dir_path=input_dir_path, model_dir_path=output_dir_path, vgg16_include_top=False)
 
     plot_and_save_history(history, VGG16BidirectionalLSTMVideoClassifier.model_name,
-                          report_dir_path + '/' + VGG16BidirectionalLSTMVideoClassifier.model_name + '-history.png')
+                          report_dir_path + '/' + VGG16BidirectionalLSTMVideoClassifier.model_name + '-hi-dim-history.png')
 
 
 if __name__ == '__main__':

@@ -325,6 +325,7 @@ class VGG16LSTMVideoClassifier(object):
         for i in range(len(x_samples)):
             x = x_samples[i]
             frames = x.shape[0]
+            print(x.shape)
             if frames > self.expected_frames:
                 x = x[0:self.expected_frames, :]
                 x_samples[i] = x

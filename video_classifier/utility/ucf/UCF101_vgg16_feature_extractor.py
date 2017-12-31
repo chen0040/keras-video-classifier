@@ -5,7 +5,7 @@ from keras.applications.vgg16 import VGG16, preprocess_input, decode_predictions
 from keras.preprocessing.image import img_to_array
 from keras.optimizers import SGD
 
-MAX_NB_CLASSES = 20
+MAX_NB_CLASSES = 2
 
 
 def extract_vgg16_features_live(model, video_input_file_path):
@@ -24,7 +24,7 @@ def extract_vgg16_features_live(model, video_input_file_path):
             input = img_to_array(img)
             input = np.expand_dims(input, axis=0)
             input = preprocess_input(input)
-            feature = model.predict(input)[0]
+            feature = model.predict(input).ravel()
             features.append(feature)
             count = count + 1
     unscaled_features = np.array(features)
@@ -49,7 +49,7 @@ def extract_vgg16_features(model, video_input_file_path, feature_output_file_pat
             input = img_to_array(img)
             input = np.expand_dims(input, axis=0)
             input = preprocess_input(input)
-            feature = model.predict(input)[0]
+            feature = model.predict(input).ravel()
             features.append(feature)
             count = count + 1
     unscaled_features = np.array(features)

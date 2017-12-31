@@ -8,7 +8,7 @@ K.set_image_dim_ordering('tf')
 
 
 def main():
-    vgg16_include_top = True
+    vgg16_include_top = False
     data_dir_path = '../video_classifier_train/very_large_data'
     model_dir_path = '../video_classifier_train/models/UCF-101'
     config_file_path = VGG16LSTMVideoClassifier.get_config_file_path(model_dir_path,

@@ -17,7 +17,7 @@ def main():
 
     classifier = VGG16LSTMVideoClassifier()
 
-    history = classifier.fit(data_dir_path=input_dir_path, model_dir_path=output_dir_path)
+    history = classifier.fit(data_dir_path=input_dir_path, model_dir_path=output_dir_path, vgg16_include_top=False)
 
     plot_and_save_history(history, VGG16LSTMVideoClassifier.model_name,
                           report_dir_path + '/' + VGG16LSTMVideoClassifier.model_name + '-history.png')

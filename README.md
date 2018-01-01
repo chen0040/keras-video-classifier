@@ -22,13 +22,19 @@ The following deep learning models have been implemented and studied:
     * training: training/vgg16_bidirectional_lstm_hi_dim_train.py (VGG16 top not included)
     * predictor: training/vgg16_bidirectional_lstm_hi_dim_predict.py (VGG16 top not included)
     
+The trained models are availabel in the video_classifier/training/models/UCF-101 folder 
+(Weight files of two of the trained model are not included as they are too big to upload, they are 
+* video_classifier/training/models/UCF-101/vgg16-lstm-hi-dim-weights.h5
+* video_classifier/training/models/UCF-101/vgg16-bidirectional-lstm-hi-dim-weights.h5
+)
+
 # Evaluation
 
 20 classes from UCF101 is used to train the video classifier. 20 epochs are set for the training
 
 ### Evaluate VGG16+LSTM (top included for VGG16)
 
-Below is the train history for the VGG16+LSTM (top included):
+Below is the train history for the VGG16+LSTM (top included for VGG16):
 
 ![vgg16-lstm-history](/video_classifier/training/reports/UCF-101/vgg16-lstm-history.png)
 
@@ -36,7 +42,7 @@ The LSTM with VGG16 (top included)feature extractor: (accuracy around 68.9% for 
 
 ### Evaluate VGG16+Bidirectional LSTM (top included for VGG16):
 
-Below is the train history for the VGG16+Bidirectional LSTM:
+Below is the train history for the VGG16+Bidirectional LSTM (top included for VGG16):
 
 ![vgg16-bidirectional-lstm-history](/video_classifier/training/reports/UCF-101/vgg16-bidirectional-lstm-history.png)
 
@@ -44,8 +50,16 @@ The bidirectional LSTM with VGG16 (top included) feature extractor: (accuracy ar
 
 ### Evaluate VGG16+LSTM (top not included for VGG16)
 
-Below is the train history for the VGG16+LSTM (top not included):
+Below is the train history for the VGG16+LSTM (top not included for VGG16):
 
 ![vgg16-lstm-history](/video_classifier/training/reports/UCF-101/vgg16-lstm-hi-dim-history.png)
+
+The LSTM with VGG16 (top not included)feature extractor: (accuracy around 100% for training and 98.83% for validation)
+
+### Evaluate VGG16+LSTM (top not included for VGG16)
+
+Below is the train history for the VGG16+LSTM (top not included for VGG16):
+
+![vgg16-lstm-history](/video_classifier/training/reports/UCF-101/vgg16-bidirectional-lstm-hi-dim-history.png)
 
 The LSTM with VGG16 (top not included)feature extractor: (accuracy around 100% for training and 98.83% for validation)

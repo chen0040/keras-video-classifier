@@ -13,6 +13,7 @@ Thumbs.db
 
 video_classifier/video_classifier_web/uploads
 video_classifier/video_classifier_train/very_large_data
+video_classifier/video_classifier_train/models/UCF-101/vgg16-lstm-hi-dim-weights.h5
 
 # Distribution / packaging
 .Python

@@ -5,7 +5,7 @@ from keras.applications.vgg16 import VGG16, preprocess_input, decode_predictions
 from keras.preprocessing.image import img_to_array
 from keras.optimizers import SGD
 
-MAX_NB_CLASSES = 2
+MAX_NB_CLASSES = 20
 
 
 def extract_vgg16_features_live(model, video_input_file_path):

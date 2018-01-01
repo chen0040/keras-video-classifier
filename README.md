@@ -26,12 +26,26 @@ The following deep learning models have been implemented and studied:
 
 20 classes from UCF101 is used to train the video classifier. 20 epochs are set for the training
 
-Below is the train history for the VGG16+LSTM:
+### Evaluate VGG16+LSTM (top included for VGG16)
+
+Below is the train history for the VGG16+LSTM (top included):
 
 ![vgg16-lstm-history](/video_classifier/video_classifier_train/reports/UCF-101/vgg16-lstm-history.png)
+
+The LSTM with VGG16 (top included)feature extractor: (accuracy around 68.9% for training and 55% for validation)
+
+### Evaluate VGG16+Bidirectional LSTM (top included for VGG16):
 
 Below is the train history for the VGG16+Bidirectional LSTM:
 
 ![vgg16-bidirectional-lstm-history](/video_classifier/video_classifier_train/reports/UCF-101/vgg16-bidirectional-lstm-history.png)
 
-Currently the bidirectional LSTM with VGG16 feature extractor gives the best performance (accuracy around 89% for training and 77% for validation)
+The bidirectional LSTM with VGG16 (top included) feature extractor: (accuracy around 89% for training and 77% for validation)
+
+### Evaluate VGG16+LSTM (top not included for VGG16)
+
+Below is the train history for the VGG16+LSTM (top not included):
+
+![vgg16-lstm-history](/video_classifier/video_classifier_train/reports/UCF-101/vgg16-lstm-hi-dim-history.png)
+
+The LSTM with VGG16 (top not included)feature extractor: (accuracy around 100% for training and 98.83% for validation)

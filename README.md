@@ -7,7 +7,13 @@ Codes are included that will download the UCF101 if they do not exist (due to th
 the video_classifier/training/very_large_data folder. The download utility codes can be found in
 video_classifier/utility/ucf directory
 
-The video classifiers are defined and implemented in the video_classifier/library directory
+The video classifiers are defined and implemented in the video_classifier/library directory. 
+
+By default the classifiers are trained using video files inside the dataset "UCF-101" located in 
+video_classifier/training/very_large_data (the videos files will be downloaded if not exist during
+training). However, the classifiers are generic and can be used to train on any other datasets 
+(just change the dataset_name parameter in its fit() method to other dataset name instead of UCF-101
+will allow it to be trained on other video datasets)
 
 The opencv-python is used to extract frames from the videos.
 

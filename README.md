@@ -86,7 +86,7 @@ After the training is completed, the trained models will be saved as cf-v1-*.* i
 
 ### Predict Video Class Label
 
-To use the trained deep learning model to predict the rating of an item by a user, you can use the following code:
+To use the trained deep learning model to predict the class label of a video, you can use the following code:
 
 ```python
 

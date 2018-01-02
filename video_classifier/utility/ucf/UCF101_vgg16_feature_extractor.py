@@ -57,9 +57,11 @@ def extract_vgg16_features(model, video_input_file_path, feature_output_file_pat
     return unscaled_features
 
 
-def scan_and_extract_vgg16_features(data_dir_path, output_dir_path, model=None):
+def scan_and_extract_vgg16_features(data_dir_path, output_dir_path, model=None, dataset_name=None):
+    if dataset_name is None:
+        dataset_name = 'UCF-101'
 
-    input_data_dir_path = data_dir_path + '/UCF-101'
+    input_data_dir_path = data_dir_path + '/' + dataset_name
     output_feature_data_dir_path = data_dir_path + '/' + output_dir_path
 
     if model is None:

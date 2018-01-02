@@ -122,9 +122,11 @@ class VGG16BidirectionalLSTMVideoClassifier(object):
         predicted_label = self.labels_idx2word[predicted_class]
         return predicted_label
 
-    def fit(self, data_dir_path, model_dir_path, vgg16_include_top=None):
+    def fit(self, data_dir_path, model_dir_path, vgg16_include_top=None, dataset_name=None):
         if vgg16_include_top is None:
             vgg16_include_top = True
+        if dataset_name is None:
+            dataset_name = 'UCF-101'
 
         self.vgg16_include_top = vgg16_include_top
 
@@ -135,15 +137,16 @@ class VGG16BidirectionalLSTMVideoClassifier(object):
         self.vgg16_model = VGG16(include_top=self.vgg16_include_top, weights='imagenet')
         self.vgg16_model.compile(optimizer=SGD(), loss='categorical_crossentropy', metrics=['accuracy'])
 
-        feature_dir_name = 'UCF-101-VGG16-Features'
+        feature_dir_name = dataset_name + '-VGG16-Features'
         if not vgg16_include_top:
-            feature_dir_name = 'UCF-101-VGG16-HiDimFeatures'
+            feature_dir_name = dataset_name + '-VGG16-HiDimFeatures'
         max_frames = 0
         self.labels = dict()
         load_ucf(data_dir_path)
         x_samples, y_samples = scan_and_extract_vgg16_features(data_dir_path,
                                                                output_dir_path=feature_dir_name,
-                                                               model=self.vgg16_model)
+                                                               model=self.vgg16_model,
+                                                               dataset_name=dataset_name)
         self.num_input_tokens = x_samples[0].shape[1]
         frames_list = []
         for x in x_samples:
@@ -290,9 +293,11 @@ class VGG16LSTMVideoClassifier(object):
         predicted_label = self.labels_idx2word[predicted_class]
         return predicted_label
 
-    def fit(self, data_dir_path, model_dir_path, vgg16_include_top=None):
+    def fit(self, data_dir_path, model_dir_path, vgg16_include_top=None, dataset_name=None):
         if vgg16_include_top is None:
             vgg16_include_top = True
+        if dataset_name is None:
+            dataset_name = 'UCF-101'
 
         self.vgg16_include_top = vgg16_include_top
 
@@ -304,15 +309,16 @@ class VGG16LSTMVideoClassifier(object):
         vgg16_model.compile(optimizer=SGD(), loss='categorical_crossentropy', metrics=['accuracy'])
         self.vgg16_model = vgg16_model
 
-        feature_dir_name = 'UCF-101-VGG16-Features'
+        feature_dir_name = dataset_name + '-VGG16-Features'
         if not vgg16_include_top:
-            feature_dir_name = 'UCF-101-VGG16-HiDimFeatures'
+            feature_dir_name = dataset_name + '-VGG16-HiDimFeatures'
         max_frames = 0
         self.labels = dict()
         load_ucf(data_dir_path)
         x_samples, y_samples = scan_and_extract_vgg16_features(data_dir_path,
                                                                output_dir_path=feature_dir_name,
-                                                               model=self.vgg16_model)
+                                                               model=self.vgg16_model,
+                                                               dataset_name=dataset_name)
         self.num_input_tokens = x_samples[0].shape[1]
         frames_list = []
         for x in x_samples:

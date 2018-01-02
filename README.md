@@ -2,7 +2,12 @@
 
 Keras implementation of video classifiers serving as web
 
-The training data is [UCF101 - Action Recognition Data Set](http://crcv.ucf.edu/data/UCF101.php)
+The training data is [UCF101 - Action Recognition Data Set](http://crcv.ucf.edu/data/UCF101.php). 
+Codes are included that will download the UCF101 if they do not exist (due to their large size) in 
+the video_classifier/training/very_large_data folder. The download utility codes can be found in
+video_classifier/utility/ucf directory
+
+The video classifiers are defined and implemented in the video_classifier/library directory
 
 The opencv-python is used to extract frames from the videos.
 
@@ -52,9 +57,10 @@ from video_classifier.utility.ucf.UCF101_loader import load_ucf
 
 K.set_image_dim_ordering('tf')
 
+dataset_name = 'UCF-101'
 input_dir_path = './very_large_data' # relative path to video_classifier/training/very_large_data
-output_dir_path = './models/UCF-101' # relative path to video_classifier/training/models/UCF-101
-report_dir_path = './reports/UCF-101' # relative path to video_classifier/training/reports/UCF-101
+output_dir_path = './models/' + dataset_name # relative path to video_classifier/training/models/UCF-101
+report_dir_path = './reports/' + dataset_name # relative path to video_classifier/training/reports/UCF-101
 
 np.random.seed(42)
 
@@ -63,7 +69,7 @@ load_ucf(input_dir_path)
 
 classifier = VGG16BidirectionalLSTMVideoClassifier()
 
-history = classifier.fit(data_dir_path=input_dir_path, model_dir_path=output_dir_path)
+history = classifier.fit(data_dir_path=input_dir_path, model_dir_path=output_dir_path, dataset_name=dataset_name)
 
 plot_and_save_history(history, VGG16BidirectionalLSTMVideoClassifier.model_name,
                       report_dir_path + '/' + VGG16BidirectionalLSTMVideoClassifier.model_name + '-history.png')
@@ -84,8 +90,9 @@ from video_classifier.library.recurrent_networks import VGG16BidirectionalLSTMVi
 from video_classifier.utility.ucf.UCF101_loader import load_ucf, scan_ucf
 
 vgg16_include_top = True
+dataset_name = 'UCF-101'
 data_dir_path = '../training/very_large_data' # relative path to video_classifier/training/very_large_data
-model_dir_path = '../training/models/UCF-101' # relative path to video_classifier/training/models/UCF-101
+model_dir_path = '../training/models/' + dataset_name # relative path to video_classifier/training/models/UCF-101
 config_file_path = VGG16BidirectionalLSTMVideoClassifier.get_config_file_path(model_dir_path,
                                                                               vgg16_include_top=vgg16_include_top)
 weight_file_path = VGG16BidirectionalLSTMVideoClassifier.get_weight_file_path(model_dir_path,
@@ -140,7 +147,7 @@ Below is the train history for the VGG16+LSTM (top not included for VGG16):
 
 The LSTM with VGG16 (top not included)feature extractor: (accuracy around 100% for training and 98.83% for validation)
 
-### Evaluate VGG16+LSTM (top not included for VGG16)
+### Evaluate VGG16+Bidirectional LSTM (top not included for VGG16)
 
 Below is the train history for the VGG16+LSTM (top not included for VGG16):
 

@@ -8,9 +8,10 @@ K.set_image_dim_ordering('tf')
 
 
 def main():
+    dataset_name = 'UCF-101'
     input_dir_path = './very_large_data'
-    output_dir_path = './models/UCF-101'
-    report_dir_path = './reports/UCF-101'
+    output_dir_path = './models/' + dataset_name
+    report_dir_path = './reports/' + dataset_name
 
     np.random.seed(42)
 
@@ -19,7 +20,7 @@ def main():
 
     classifier = VGG16BidirectionalLSTMVideoClassifier()
 
-    history = classifier.fit(data_dir_path=input_dir_path, model_dir_path=output_dir_path)
+    history = classifier.fit(data_dir_path=input_dir_path, model_dir_path=output_dir_path, dataset_name=dataset_name)
 
     plot_and_save_history(history, VGG16BidirectionalLSTMVideoClassifier.model_name,
                           report_dir_path + '/' + VGG16BidirectionalLSTMVideoClassifier.model_name + '-history.png')

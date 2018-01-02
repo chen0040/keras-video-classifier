@@ -28,6 +28,86 @@ The trained models are availabel in the video_classifier/training/models/UCF-101
 * video_classifier/training/models/UCF-101/vgg16-bidirectional-lstm-hi-dim-weights.h5
 )
 
+# Usage
+
+### Train CF model
+
+To train a deep learning model, say VGG16BidirectionalLSTMVideoClassifier, run the following commands:
+
+```bash
+pip install requirements.txt
+
+cd video_classifier/training
+python vgg16_bidirectional_lstm_train.py 
+```
+
+The training code in vgg16_bidirectional_lstm_train.py is quite straightforward and illustrated below:
+
+```python
+import numpy as np
+from keras import backend as K
+from video_classifier.library.recurrent_networks import VGG16BidirectionalLSTMVideoClassifier
+from video_classifier.utility.plot_utils import plot_and_save_history
+
+
+K.set_image_dim_ordering('tf')
+
+input_dir_path = './very_large_data'
+output_dir_path = './models/UCF-101'
+report_dir_path = './reports/UCF-101'
+
+np.random.seed(42)
+
+classifier = VGG16BidirectionalLSTMVideoClassifier()
+
+history = classifier.fit(data_dir_path=input_dir_path, model_dir_path=output_dir_path)
+
+plot_and_save_history(history, VGG16BidirectionalLSTMVideoClassifier.model_name,
+                      report_dir_path + '/' + VGG16BidirectionalLSTMVideoClassifier.model_name + '-history.png')
+
+```
+
+After the training is completed, the trained models will be saved as cf-v1-*.* in the video_classifier/training/models.
+
+### Predict Rating
+
+To use the trained deep learning model to predict the rating of an item by a user, you can use the following code:
+
+```python
+
+import numpy as np
+
+from video_classifier.library.recurrent_networks import VGG16BidirectionalLSTMVideoClassifier
+from video_classifier.utility.ucf.UCF101_loader import load_ucf, scan_ucf
+
+vgg16_include_top = True
+data_dir_path = '../training/very_large_data'
+model_dir_path = '../training/models/UCF-101'
+config_file_path = VGG16BidirectionalLSTMVideoClassifier.get_config_file_path(model_dir_path,
+                                                                              vgg16_include_top=vgg16_include_top)
+weight_file_path = VGG16BidirectionalLSTMVideoClassifier.get_weight_file_path(model_dir_path,
+                                                                              vgg16_include_top=vgg16_include_top)
+
+np.random.seed(42)
+
+load_ucf(data_dir_path)
+
+predictor = VGG16BidirectionalLSTMVideoClassifier()
+predictor.load_model(config_file_path, weight_file_path)
+
+# scan_ucf returns a dictionary object of (video_file_path, video_class_label) where video_file_path
+# is the key and video_class_label is the value
+videos = scan_ucf(data_dir_path, predictor.nb_classes)
+
+video_file_path_list = np.array([file_path for file_path in videos.keys()])
+np.random.shuffle(video_file_path_list)
+
+for video_file_path in video_file_path_list:
+    label = videos[video_file_path]
+    predicted_label = predictor.predict(video_file_path)
+    print('predicted: ' + predicted_label + ' actual: ' + label)
+```
+
 # Evaluation
 
 20 classes from UCF101 is used to train the video classifier. 20 epochs are set for the training

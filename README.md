@@ -22,7 +22,7 @@ The following deep learning models have been implemented and studied:
     * training: training/vgg16_bidirectional_lstm_hi_dim_train.py (VGG16 top not included)
     * predictor: training/vgg16_bidirectional_lstm_hi_dim_predict.py (VGG16 top not included)
     
-The trained models are availabel in the video_classifier/training/models/UCF-101 folder 
+The trained models are available in the video_classifier/training/models/UCF-101 folder 
 (Weight files of two of the trained model are not included as they are too big to upload, they are 
 * video_classifier/training/models/UCF-101/vgg16-lstm-hi-dim-weights.h5
 * video_classifier/training/models/UCF-101/vgg16-bidirectional-lstm-hi-dim-weights.h5
@@ -30,7 +30,7 @@ The trained models are availabel in the video_classifier/training/models/UCF-101
 
 # Usage
 
-### Train CF model
+### Train Deep Learning model
 
 To train a deep learning model, say VGG16BidirectionalLSTMVideoClassifier, run the following commands:
 
@@ -48,15 +48,18 @@ import numpy as np
 from keras import backend as K
 from video_classifier.library.recurrent_networks import VGG16BidirectionalLSTMVideoClassifier
 from video_classifier.utility.plot_utils import plot_and_save_history
-
+from video_classifier.utility.ucf.UCF101_loader import load_ucf
 
 K.set_image_dim_ordering('tf')
 
-input_dir_path = './very_large_data'
-output_dir_path = './models/UCF-101'
-report_dir_path = './reports/UCF-101'
+input_dir_path = './very_large_data' # relative path to video_classifier/training/very_large_data
+output_dir_path = './models/UCF-101' # relative path to video_classifier/training/models/UCF-101
+report_dir_path = './reports/UCF-101' # relative path to video_classifier/training/reports/UCF-101
 
 np.random.seed(42)
+
+# this line downloads the video files of UCF-101 dataset if they are not available in the very_large_data folder
+load_ucf(input_dir_path)
 
 classifier = VGG16BidirectionalLSTMVideoClassifier()
 
@@ -69,7 +72,7 @@ plot_and_save_history(history, VGG16BidirectionalLSTMVideoClassifier.model_name,
 
 After the training is completed, the trained models will be saved as cf-v1-*.* in the video_classifier/training/models.
 
-### Predict Rating
+### Predict Video Class Label
 
 To use the trained deep learning model to predict the rating of an item by a user, you can use the following code:
 
@@ -81,8 +84,8 @@ from video_classifier.library.recurrent_networks import VGG16BidirectionalLSTMVi
 from video_classifier.utility.ucf.UCF101_loader import load_ucf, scan_ucf
 
 vgg16_include_top = True
-data_dir_path = '../training/very_large_data'
-model_dir_path = '../training/models/UCF-101'
+data_dir_path = '../training/very_large_data' # relative path to video_classifier/training/very_large_data
+model_dir_path = '../training/models/UCF-101' # relative path to video_classifier/training/models/UCF-101
 config_file_path = VGG16BidirectionalLSTMVideoClassifier.get_config_file_path(model_dir_path,
                                                                               vgg16_include_top=vgg16_include_top)
 weight_file_path = VGG16BidirectionalLSTMVideoClassifier.get_weight_file_path(model_dir_path,
@@ -90,6 +93,7 @@ weight_file_path = VGG16BidirectionalLSTMVideoClassifier.get_weight_file_path(mo
 
 np.random.seed(42)
 
+# this line downloads the video files of UCF-101 dataset if they are not available in the very_large_data folder
 load_ucf(data_dir_path)
 
 predictor = VGG16BidirectionalLSTMVideoClassifier()

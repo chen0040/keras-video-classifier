@@ -5,9 +5,9 @@ from keras.layers import Conv2D, Activation, MaxPooling2D, Dropout, Flatten, Den
 from keras.utils import np_utils
 from sklearn.model_selection import train_test_split
 
-from video_classifier.utility.ucf.UCF101_extractor import scan_and_extract_videos_for_conv2d
+from video_classifier.utility.ucf.UCF101_extractor import scan_and_extract_videos_for_conv2d, extract_videos_for_conv2d
 
-BATCH_SIZE = 64
+BATCH_SIZE = 8
 NUM_EPOCHS = 20
 
 
@@ -64,6 +64,8 @@ class CnnVideoClassifier(object):
         model.add(Dense(units=nb_classes))
         model.add(Activation('softmax'))
 
+        model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
+
         return model
 
     @staticmethod
@@ -91,18 +93,18 @@ class CnnVideoClassifier(object):
         self.config = config
 
         self.model = self.create_model(
-            input_shape=(self.img_width, self.img_height, self.img_channels * self.expected_frames),
+            input_shape=(self.img_width, self.img_height, self.expected_frames),
             nb_classes=self.nb_classes)
         self.model.load_weights(weight_file_path)
 
     def predict(self, video_file_path):
-        x = extract_vgg16_features_live(self.vgg16_model, video_file_path)
-        frames = x.shape[0]
+        x = extract_videos_for_conv2d(video_file_path, self.expected_frames, self.expected_frames)
+        frames = x.shape[2]
         if frames > self.expected_frames:
-            x = x[0:self.expected_frames, :]
+            x = x[:, :, 0:self.expected_frames]
         elif frames < self.expected_frames:
-            temp = np.zeros(shape=(self.expected_frames, x.shape[1]))
-            temp[0:frames, :] = x
+            temp = np.zeros(shape=(x.shape[0], x.shape[1], self.expected_frames))
+            temp[:, :, 0:frames] = x
             x = temp
         predicted_class = np.argmax(self.model.predict(np.array([x]))[0])
         predicted_label = self.labels_idx2word[predicted_class]
@@ -120,7 +122,6 @@ class CnnVideoClassifier(object):
         weight_file_path = CnnVideoClassifier.get_weight_file_path(model_dir_path)
         architecture_file_path = CnnVideoClassifier.get_architecture_file_path(model_dir_path)
 
-        max_frames = 0
         self.labels = dict()
         x_samples, y_samples = scan_and_extract_videos_for_conv2d(data_dir_path,
                                                                   max_frames=max_frames,
@@ -128,22 +129,23 @@ class CnnVideoClassifier(object):
         self.img_width, self.img_height, self.img_channels = x_samples[0].shape
         frames_list = []
         for x in x_samples:
-            frames = x.shape[0]
+            frames = x.shape[2]
             frames_list.append(frames)
             max_frames = max(frames, max_frames)
-        self.expected_frames = int(np.mean(frames_list))
+        self.expected_frames = 3 # int(np.mean(frames_list))
         print('max frames: ', max_frames)
         print('expected frames: ', self.expected_frames)
         for i in range(len(x_samples)):
             x = x_samples[i]
-            frames = x.shape[0]
+            frames = x.shape[2]
             if frames > self.expected_frames:
-                x = x[0:self.expected_frames, :]
+                x = x[:, :, 0:self.expected_frames]
                 x_samples[i] = x
             elif frames < self.expected_frames:
-                temp = np.zeros(shape=(self.expected_frames, x.shape[1]))
-                temp[0:frames, :] = x
+                temp = np.zeros(shape=(x.shape[0], x.shape[1], self.expected_frames))
+                temp[:, :, 0:frames] = x
                 x_samples[i] = temp
+            print(x_samples[i].shape)
         for y in y_samples:
             if y not in self.labels:
                 self.labels[y] = len(self.labels)
@@ -163,11 +165,14 @@ class CnnVideoClassifier(object):
         config['img_channels'] = self.img_channels
         config['expected_frames'] = self.expected_frames
 
+        print(config)
+
         self.config = config
 
         np.save(config_file_path, config)
 
-        model = self.create_model()
+        model = self.create_model(input_shape=(self.img_width, self.img_height, self.expected_frames),
+                                  nb_classes=self.nb_classes)
         open(architecture_file_path, 'w').write(model.to_json())
 
         Xtrain, Xtest, Ytrain, Ytest = train_test_split(x_samples, y_samples, test_size=0.3, random_state=42)
@@ -177,6 +182,8 @@ class CnnVideoClassifier(object):
 
         train_num_batches = len(Xtrain) // BATCH_SIZE
         test_num_batches = len(Xtest) // BATCH_SIZE
+
+        print('start fit_generator')
 
         checkpoint = ModelCheckpoint(filepath=weight_file_path, save_best_only=True)
         history = model.fit_generator(generator=train_gen, steps_per_epoch=train_num_batches,

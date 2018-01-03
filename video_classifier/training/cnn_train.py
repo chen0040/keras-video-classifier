@@ -22,7 +22,9 @@ def main():
 
     classifier = CnnVideoClassifier()
 
-    history = classifier.fit(data_dir_path=input_dir_path, model_dir_path=output_dir_path, dataset_name=dataset_name, max_frames=10)
+    history = classifier.fit(data_dir_path=input_dir_path, model_dir_path=output_dir_path,
+                             dataset_name=dataset_name,
+                             max_frames=10)
 
     plot_and_save_history(history, CnnVideoClassifier.model_name,
                           report_dir_path + '/' + CnnVideoClassifier.model_name + '-history.png')

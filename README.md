@@ -27,6 +27,10 @@ The following deep learning models have been implemented and studied:
     * training: training/vgg16_lstm_hi_dim_train.py (VGG16 top not included) 
     * predictor: training/vgg16_lstm_hi_dim_predict.py (VGG16 top not included)
     
+* Convolutional Network: this approach uses stores frames into the "channels" of input of the CNN which then classify the "image" (video frames stacked in the channels)
+    * training: training/cnn_train.py 
+    * predictor: training/cnn_predict.py
+    
 * VGG16+Bidirectional LSTM: this approach uses VGG16 to extract features from individual frame of the video, the sequence of frame features are then taken into bidirectional LSTM recurrent networks for classifier.
     * training: training/vgg16_bidirectional_lstm_train.py 
     * predictor: training/vgg16_bidirectional_lstm_predict.py

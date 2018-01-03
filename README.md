@@ -27,15 +27,15 @@ The following deep learning models have been implemented and studied:
     * training: training/vgg16_lstm_hi_dim_train.py (VGG16 top not included) 
     * predictor: training/vgg16_lstm_hi_dim_predict.py (VGG16 top not included)
     
-* Convolutional Network: this approach uses stores frames into the "channels" of input of the CNN which then classify the "image" (video frames stacked in the channels)
-    * training: training/cnn_train.py 
-    * predictor: training/cnn_predict.py
-    
 * VGG16+Bidirectional LSTM: this approach uses VGG16 to extract features from individual frame of the video, the sequence of frame features are then taken into bidirectional LSTM recurrent networks for classifier.
     * training: training/vgg16_bidirectional_lstm_train.py 
     * predictor: training/vgg16_bidirectional_lstm_predict.py
     * training: training/vgg16_bidirectional_lstm_hi_dim_train.py (VGG16 top not included)
     * predictor: training/vgg16_bidirectional_lstm_hi_dim_predict.py (VGG16 top not included)
+    
+* Convolutional Network: this approach uses stores frames into the "channels" of input of the CNN which then classify the "image" (video frames stacked in the channels)
+    * training: training/cnn_train.py 
+    * predictor: training/cnn_predict.py
     
 The trained models are available in the video_classifier/training/models/UCF-101 folder 
 (Weight files of two of the trained model are not included as they are too big to upload, they are 
@@ -164,3 +164,12 @@ Below is the train history for the VGG16+LSTM (top not included for VGG16):
 ![vgg16-lstm-history](/video_classifier/training/reports/UCF-101/vgg16-bidirectional-lstm-hi-dim-history.png)
 
 The LSTM with VGG16 (top not included)feature extractor: (accuracy around 100% for training and 98.57% for validation)
+
+
+### Evaluate Convolutional Network
+
+Below is the train history for the Convolutional Network:
+
+![cnn-history](/video_classifier/training/reports/UCF-101/cnn-history.png)
+
+The Convolutional Network: (accuracy around 22.73% for training and 28.75% for validation)

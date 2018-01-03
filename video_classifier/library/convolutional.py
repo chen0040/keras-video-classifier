@@ -22,7 +22,7 @@ def generate_batch(x_samples, y_samples):
 
 
 class CnnVideoClassifier(object):
-    model_name = 'vgg16-bidirectional-lstm'
+    model_name = 'cnn'
 
     def __init__(self):
         self.img_width = None

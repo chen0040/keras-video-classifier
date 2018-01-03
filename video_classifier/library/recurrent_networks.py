@@ -10,7 +10,6 @@ from keras.callbacks import ModelCheckpoint
 
 import numpy as np
 
-from video_classifier.utility.ucf.UCF101_loader import load_ucf
 from video_classifier.utility.ucf.UCF101_vgg16_feature_extractor import extract_vgg16_features_live, \
     scan_and_extract_vgg16_features
 
@@ -142,7 +141,6 @@ class VGG16BidirectionalLSTMVideoClassifier(object):
             feature_dir_name = dataset_name + '-VGG16-HiDimFeatures'
         max_frames = 0
         self.labels = dict()
-        load_ucf(data_dir_path)
         x_samples, y_samples = scan_and_extract_vgg16_features(data_dir_path,
                                                                output_dir_path=feature_dir_name,
                                                                model=self.vgg16_model,
@@ -314,7 +312,6 @@ class VGG16LSTMVideoClassifier(object):
             feature_dir_name = dataset_name + '-VGG16-HiDimFeatures'
         max_frames = 0
         self.labels = dict()
-        load_ucf(data_dir_path)
         x_samples, y_samples = scan_and_extract_vgg16_features(data_dir_path,
                                                                output_dir_path=feature_dir_name,
                                                                model=self.vgg16_model,

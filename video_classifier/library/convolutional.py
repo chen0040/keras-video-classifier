@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 
 from video_classifier.utility.ucf.UCF101_extractor import scan_and_extract_videos_for_conv2d, extract_videos_for_conv2d
 
-BATCH_SIZE = 8
+BATCH_SIZE = 32
 NUM_EPOCHS = 20
 
 
@@ -85,7 +85,6 @@ class CnnVideoClassifier(object):
         config = np.load(config_file_path).item()
         self.img_width = config['img_width']
         self.img_height = config['img_height']
-        self.img_channels = config['img_channels']
         self.nb_classes = config['nb_classes']
         self.labels = config['labels']
         self.expected_frames = config['expected_frames']
@@ -126,13 +125,13 @@ class CnnVideoClassifier(object):
         x_samples, y_samples = scan_and_extract_videos_for_conv2d(data_dir_path,
                                                                   max_frames=max_frames,
                                                                   dataset_name=dataset_name)
-        self.img_width, self.img_height, self.img_channels = x_samples[0].shape
+        self.img_width, self.img_height, _ = x_samples[0].shape
         frames_list = []
         for x in x_samples:
             frames = x.shape[2]
             frames_list.append(frames)
             max_frames = max(frames, max_frames)
-        self.expected_frames = 3 # int(np.mean(frames_list))
+        self.expected_frames = int(np.mean(frames_list))
         print('max frames: ', max_frames)
         print('expected frames: ', self.expected_frames)
         for i in range(len(x_samples)):
@@ -145,7 +144,6 @@ class CnnVideoClassifier(object):
                 temp = np.zeros(shape=(x.shape[0], x.shape[1], self.expected_frames))
                 temp[:, :, 0:frames] = x
                 x_samples[i] = temp
-            print(x_samples[i].shape)
         for y in y_samples:
             if y not in self.labels:
                 self.labels[y] = len(self.labels)
@@ -162,7 +160,6 @@ class CnnVideoClassifier(object):
         config['nb_classes'] = self.nb_classes
         config['img_width'] = self.img_width
         config['img_height'] = self.img_height
-        config['img_channels'] = self.img_channels
         config['expected_frames'] = self.expected_frames
 
         print(config)

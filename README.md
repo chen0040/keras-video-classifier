@@ -7,7 +7,7 @@ Codes are included that will download the UCF101 if they do not exist (due to th
 the video_classifier/training/very_large_data folder. The download utility codes can be found in
 video_classifier/utility/ucf directory
 
-The video classifiers are defined and implemented in the video_classifier/library directory. 
+The video classifiers are defined and implemented in the [video_classifier/library](video_classifier/library) directory. 
 
 By default the classifiers are trained using video files inside the dataset "UCF-101" located in 
 video_classifier/training/very_large_data (the videos files will be downloaded if not exist during
@@ -22,20 +22,20 @@ The opencv-python is used to extract frames from the videos.
 The following deep learning models have been implemented and studied:
 
 * VGG16+LSTM: this approach uses VGG16 to extract features from individual frame of the video, the sequence of frame features are then taken into LSTM recurrent networks for classifier.
-    * training: training/vgg16_lstm_train.py 
-    * predictor: training/vgg16_lstm_predict.py
-    * training: training/vgg16_lstm_hi_dim_train.py (VGG16 top not included) 
-    * predictor: training/vgg16_lstm_hi_dim_predict.py (VGG16 top not included)
+    * training: [video_classifier/training/vgg16_lstm_train.py](video_classifier/training/vgg16_lstm_train.py) 
+    * predictor: [video_classifier/training/vgg16_lstm_predict.py](video_classifier/training/vgg16_lstm_predict.py)
+    * training: [video_classifier/training/vgg16_lstm_hi_dim_train.py](video_classifier/training/vgg16_lstm_hi_dim_train.py) (VGG16 top not included) 
+    * predictor: [video_classifier/training/vgg16_lstm_hi_dim_predict.py](video_classifier/training/vgg16_lstm_hi_dim_predict.py) (VGG16 top not included)
     
 * VGG16+Bidirectional LSTM: this approach uses VGG16 to extract features from individual frame of the video, the sequence of frame features are then taken into bidirectional LSTM recurrent networks for classifier.
-    * training: training/vgg16_bidirectional_lstm_train.py 
-    * predictor: training/vgg16_bidirectional_lstm_predict.py
-    * training: training/vgg16_bidirectional_lstm_hi_dim_train.py (VGG16 top not included)
-    * predictor: training/vgg16_bidirectional_lstm_hi_dim_predict.py (VGG16 top not included)
+    * training: [video_classifier/training/vgg16_bidirectional_lstm_train.py](video_classifier/training/vgg16_bidirectional_lstm_train.py) 
+    * predictor: [video_classifier/training/vgg16_bidirectional_lstm_predict.py](video_classifier/training/vgg16_bidirectional_lstm_predict.py)
+    * training: [video_classifier/training/vgg16_bidirectional_lstm_hi_dim_train.py](video_classifier/training/vgg16_bidirectional_lstm_hi_dim_train.py) (VGG16 top not included)
+    * predictor: [video_classifier/training/vgg16_bidirectional_lstm_hi_dim_predict.py](video_classifier/training/vgg16_bidirectional_lstm_hi_dim_predict.py) (VGG16 top not included)
     
 * Convolutional Network: this approach uses stores frames into the "channels" of input of the CNN which then classify the "image" (video frames stacked in the channels)
-    * training: training/cnn_train.py 
-    * predictor: training/cnn_predict.py
+    * training: video_classifier/training/cnn_train.py 
+    * predictor: video_classifier/training/cnn_predict.py
     
 The trained models are available in the video_classifier/training/models/UCF-101 folder 
 (Weight files of two of the trained model are not included as they are too big to upload, they are 
@@ -132,6 +132,7 @@ for video_file_path in video_file_path_list:
 # Evaluation
 
 20 classes from UCF101 is used to train the video classifier. 20 epochs are set for the training
+
 
 ### Evaluate VGG16+LSTM (top included for VGG16)
 

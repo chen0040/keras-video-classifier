@@ -46,8 +46,9 @@ def extract_features(video_input_file_path, feature_output_file_path):
 
 
 def extract_videos_for_conv2d(video_input_file_path, feature_output_file_path, max_frames):
-    if os.path.exists(feature_output_file_path):
-        return np.load(feature_output_file_path)
+    if feature_output_file_path is not None:
+        if os.path.exists(feature_output_file_path):
+            return np.load(feature_output_file_path)
     count = 0
     print('Extracting frames from video: ', video_input_file_path)
     vidcap = cv2.VideoCapture(video_input_file_path)
@@ -67,7 +68,8 @@ def extract_videos_for_conv2d(video_input_file_path, feature_output_file_path, m
     unscaled_features = np.array(features)
     unscaled_features = np.transpose(unscaled_features, axes=(1, 2, 0))
     print(unscaled_features.shape)
-    np.save(feature_output_file_path, unscaled_features)
+    if feature_output_file_path is not None:
+        np.save(feature_output_file_path, unscaled_features)
     return unscaled_features
 
 

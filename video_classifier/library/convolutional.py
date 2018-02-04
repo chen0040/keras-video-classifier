@@ -4,6 +4,7 @@ from keras.callbacks import ModelCheckpoint
 from keras.layers import Conv2D, Activation, MaxPooling2D, Dropout, Flatten, Dense
 from keras.utils import np_utils
 from sklearn.model_selection import train_test_split
+from keras.utils.vis_utils import plot_model
 
 from video_classifier.utility.ucf.UCF101_extractor import scan_and_extract_videos_for_conv2d, extract_videos_for_conv2d
 
@@ -97,7 +98,7 @@ class CnnVideoClassifier(object):
         self.model.load_weights(weight_file_path)
 
     def predict(self, video_file_path):
-        x = extract_videos_for_conv2d(video_file_path, self.expected_frames, self.expected_frames)
+        x = extract_videos_for_conv2d(video_file_path, None, self.expected_frames)
         frames = x.shape[2]
         if frames > self.expected_frames:
             x = x[:, :, 0:self.expected_frames]
@@ -190,3 +191,7 @@ class CnnVideoClassifier(object):
         model.save_weights(weight_file_path)
 
         return history
+
+    def save_graph(self, to_file):
+        plot_model(self.model, to_file=to_file)
+

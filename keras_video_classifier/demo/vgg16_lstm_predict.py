@@ -1,16 +1,16 @@
 import numpy as np
 from keras import backend as K
 
-from video_classifier.library.recurrent_networks import VGG16LSTMVideoClassifier
-from video_classifier.utility.ucf.UCF101_loader import load_ucf, scan_ucf
+from keras_video_classifier.library.recurrent_networks import VGG16LSTMVideoClassifier
+from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf, scan_ucf
 
 K.set_image_dim_ordering('tf')
 
 
 def main():
-    vgg16_include_top = False
-    data_dir_path = '../training/very_large_data'
-    model_dir_path = '../training/models/UCF-101'
+    vgg16_include_top = True
+    data_dir_path = './very_large_data'
+    model_dir_path = './models/UCF-101'
     config_file_path = VGG16LSTMVideoClassifier.get_config_file_path(model_dir_path,
                                                                      vgg16_include_top=vgg16_include_top)
     weight_file_path = VGG16LSTMVideoClassifier.get_weight_file_path(model_dir_path,

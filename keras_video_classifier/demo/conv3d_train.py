@@ -4,8 +4,8 @@ from keras.layers import Flatten, Dense, Activation, Dropout
 from keras.layers.convolutional import Conv3D
 from keras.utils import np_utils
 import numpy as np
-from video_classifier.utility.ucf.UCF101_loader import load_ucf
-from video_classifier.utility.ucf.UCF101_extractor import scan_and_extract_features, MAX_NB_CLASSES
+from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf
+from keras_video_classifier.library.utility import scan_and_extract_features, MAX_NB_CLASSES
 from sklearn.model_selection import train_test_split
 
 BATCH_SIZE = 8

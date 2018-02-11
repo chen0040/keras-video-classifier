@@ -172,7 +172,7 @@ def scan_and_extract_videos_for_conv2d(data_dir_path, dataset_name=None, max_fra
 
 def main():
     print(cv2.__version__)
-    data_dir_path = '../../training/very_large_data'
+    data_dir_path = '.././very_large_data'
     X, Y = scan_and_extract_videos_for_conv2d(data_dir_path)
     print(X[0].shape)
 

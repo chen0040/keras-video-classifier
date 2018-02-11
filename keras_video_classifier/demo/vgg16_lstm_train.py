@@ -1,10 +1,10 @@
 import numpy as np
 from keras import backend as K
 
-from video_classifier.utility.plot_utils import plot_and_save_history
+from keras_video_classifier.library.utility.plot_utils import plot_and_save_history
 
-from video_classifier.library.recurrent_networks import VGG16LSTMVideoClassifier
-from video_classifier.utility.ucf.UCF101_loader import load_ucf
+from keras_video_classifier.library.recurrent_networks import VGG16LSTMVideoClassifier
+from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf
 
 K.set_image_dim_ordering('tf')
 
@@ -22,11 +22,10 @@ def main():
 
     classifier = VGG16LSTMVideoClassifier()
 
-    history = classifier.fit(data_dir_path=input_dir_path, model_dir_path=output_dir_path, vgg16_include_top=False,
-                             dataset_name=dataset_name)
+    history = classifier.fit(data_dir_path=input_dir_path, model_dir_path=output_dir_path, dataset_name=dataset_name)
 
     plot_and_save_history(history, VGG16LSTMVideoClassifier.model_name,
-                          report_dir_path + '/' + VGG16LSTMVideoClassifier.model_name + '-hi-dim-history.png')
+                          report_dir_path + '/' + VGG16LSTMVideoClassifier.model_name + '-history.png')
 
 
 if __name__ == '__main__':

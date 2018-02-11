@@ -1,7 +1,7 @@
 import cv2
 import os
 import numpy as np
-from keras.applications.vgg16 import VGG16, preprocess_input, decode_predictions
+from keras.applications.vgg16 import VGG16, preprocess_input
 from keras.preprocessing.image import img_to_array
 from keras.optimizers import SGD
 
@@ -96,12 +96,3 @@ def scan_and_extract_vgg16_features(data_dir_path, output_dir_path, model=None, 
 
     return x_samples, y_samples
 
-
-def main():
-    print(cv2.__version__)
-    data_dir_path = '../very_large_data'
-    scan_and_extract_vgg16_features(data_dir_path)
-
-
-if __name__ == '__main__':
-    main()

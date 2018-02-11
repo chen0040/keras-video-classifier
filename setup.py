@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(
-    name='video_classifier',
-    packages=['video_classifier'],
+    name='keras_video_classifier',
+    packages=['keras_video_classifier'],
     include_package_data=True,
     install_requires=[
         'flask',

@@ -1,14 +1,14 @@
 import numpy as np
 
-from video_classifier.library.recurrent_networks import VGG16BidirectionalLSTMVideoClassifier
-from video_classifier.utility.ucf.UCF101_loader import load_ucf, scan_ucf
+from keras_video_classifier.library.recurrent_networks import VGG16BidirectionalLSTMVideoClassifier
+from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf, scan_ucf
 
 
 def main():
 
     vgg16_include_top = False
-    data_dir_path = '../training/very_large_data'
-    model_dir_path = '../training/models/UCF-101'
+    data_dir_path = './very_large_data'
+    model_dir_path = './models/UCF-101'
     config_file_path = VGG16BidirectionalLSTMVideoClassifier.get_config_file_path(model_dir_path,
                                                                                   vgg16_include_top=vgg16_include_top)
     weight_file_path = VGG16BidirectionalLSTMVideoClassifier.get_weight_file_path(model_dir_path,

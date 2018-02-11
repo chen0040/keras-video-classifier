@@ -6,7 +6,8 @@ from keras.utils import np_utils
 from sklearn.model_selection import train_test_split
 from keras.utils.vis_utils import plot_model
 
-from video_classifier.utility.ucf.UCF101_extractor import scan_and_extract_videos_for_conv2d, extract_videos_for_conv2d
+from keras_video_classifier.library.utility.ucf.UCF101_extractor import scan_and_extract_videos_for_conv2d, \
+    extract_videos_for_conv2d
 
 BATCH_SIZE = 32
 NUM_EPOCHS = 20

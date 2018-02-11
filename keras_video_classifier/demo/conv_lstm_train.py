@@ -2,12 +2,8 @@
 This network is used to predict the next frame of an artificially
 generated movie which contains moving squares.
 """
-from keras.models import Sequential
-from keras.layers import Dense, Activation, Flatten
-from keras.layers.convolutional import Conv3D
 from keras.layers.convolutional_recurrent import ConvLSTM2D
 from keras.layers.normalization import BatchNormalization
-import numpy as np
 
 from keras import backend as K
 
@@ -18,8 +14,8 @@ from keras.models import Sequential
 from keras.layers.convolutional import Conv3D
 from keras.utils import np_utils
 import numpy as np
-from video_classifier.utility.ucf.UCF101_loader import load_ucf
-from video_classifier.utility.ucf.UCF101_extractor import scan_and_extract_features, MAX_NB_CLASSES
+from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf
+from keras_video_classifier.library.utility import scan_and_extract_features, MAX_NB_CLASSES
 from sklearn.model_selection import train_test_split
 
 BATCH_SIZE = 8

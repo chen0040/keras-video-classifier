@@ -99,9 +99,11 @@ def scan_and_extract_images(data_dir_path):
             break
 
 
-def scan_and_extract_features(data_dir_path):
-    input_data_dir_path = data_dir_path + '/UCF-101'
-    output_feature_data_dir_path = data_dir_path + '/UCF-101-Features'
+def scan_and_extract_features(data_dir_path, data_set_name=None):
+    if data_set_name is None:
+        data_set_name = 'UCF-101'
+    input_data_dir_path = data_dir_path + '/' + data_set_name
+    output_feature_data_dir_path = data_dir_path + '/' + data_set_name + '-Features'
     
     if not os.path.exists(output_feature_data_dir_path):
         os.makedirs(output_feature_data_dir_path)
@@ -132,14 +134,14 @@ def scan_and_extract_features(data_dir_path):
     return x_samples, y_samples
 
 
-def scan_and_extract_videos_for_conv2d(data_dir_path, dataset_name=None, max_frames=None):
-    if dataset_name is None:
-        dataset_name = 'UCF-101'
+def scan_and_extract_videos_for_conv2d(data_dir_path, data_set_name=None, max_frames=None):
+    if data_set_name is None:
+        data_set_name = 'UCF-101'
     if max_frames is None:
         max_frames = 10
 
-    input_data_dir_path = data_dir_path + '/' + dataset_name
-    output_feature_data_dir_path = data_dir_path + '/' + dataset_name + '-Conv2d'
+    input_data_dir_path = data_dir_path + '/' + data_set_name
+    output_feature_data_dir_path = data_dir_path + '/' + data_set_name + '-Conv2d'
 
     if not os.path.exists(output_feature_data_dir_path):
         os.makedirs(output_feature_data_dir_path)

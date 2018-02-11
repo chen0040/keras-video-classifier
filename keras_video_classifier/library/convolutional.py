@@ -6,7 +6,7 @@ from keras.utils import np_utils
 from sklearn.model_selection import train_test_split
 from keras.utils.vis_utils import plot_model
 
-from keras_video_classifier.library.utility.ucf.UCF101_extractor import scan_and_extract_videos_for_conv2d, \
+from keras_video_classifier.library.utility.frame_extractors.frame_extractor import scan_and_extract_videos_for_conv2d, \
     extract_videos_for_conv2d
 
 BATCH_SIZE = 32
@@ -111,13 +111,13 @@ class CnnVideoClassifier(object):
         predicted_label = self.labels_idx2word[predicted_class]
         return predicted_label
 
-    def fit(self, data_dir_path, model_dir_path, epochs=None, dataset_name=None, max_frames=None):
+    def fit(self, data_dir_path, model_dir_path, epochs=None, data_set_name=None, max_frames=None):
         if epochs is None:
             epochs = NUM_EPOCHS
         if max_frames is None:
             max_frames = 10
-        if dataset_name is None:
-            dataset_name = 'UCF-101'
+        if data_set_name is None:
+            data_set_name = 'UCF-101'
 
         config_file_path = CnnVideoClassifier.get_config_file_path(model_dir_path)
         weight_file_path = CnnVideoClassifier.get_weight_file_path(model_dir_path)
@@ -126,7 +126,7 @@ class CnnVideoClassifier(object):
         self.labels = dict()
         x_samples, y_samples = scan_and_extract_videos_for_conv2d(data_dir_path,
                                                                   max_frames=max_frames,
-                                                                  dataset_name=dataset_name)
+                                                                  data_set_name=data_set_name)
         self.img_width, self.img_height, _ = x_samples[0].shape
         frames_list = []
         for x in x_samples:

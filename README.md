@@ -12,7 +12,7 @@ The video classifiers are defined and implemented in the  [keras_video_classifie
 By default the classifiers are trained using video files inside the dataset "UCF-101" located in 
 [keras_video_classifier/demo/very_large_data](keras_video_classifier/demo/very_large_data) (the videos files will be downloaded if not exist during
 training). However, the classifiers are generic and can be used to train on any other datasets 
-(just change the dataset_name parameter in its fit() method to other dataset name instead of UCF-101
+(just change the data_set_name parameter in its fit() method to other dataset name instead of UCF-101
 will allow it to be trained on other video datasets)
 
 The opencv-python is used to extract frames from the videos.
@@ -67,10 +67,10 @@ from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf
 
 K.set_image_dim_ordering('tf')
 
-dataset_name = 'UCF-101'
+data_set_name = 'UCF-101'
 input_dir_path = './very_large_data' 
-output_dir_path = './models/' + dataset_name 
-report_dir_path = './reports/' + dataset_name 
+output_dir_path = './models/' + data_set_name 
+report_dir_path = './reports/' + data_set_name 
 
 np.random.seed(42)
 
@@ -79,7 +79,7 @@ load_ucf(input_dir_path)
 
 classifier = VGG16BidirectionalLSTMVideoClassifier()
 
-history = classifier.fit(data_dir_path=input_dir_path, model_dir_path=output_dir_path, dataset_name=dataset_name)
+history = classifier.fit(data_dir_path=input_dir_path, model_dir_path=output_dir_path, data_set_name=data_set_name)
 
 plot_and_save_history(history, VGG16BidirectionalLSTMVideoClassifier.model_name,
                       report_dir_path + '/' + VGG16BidirectionalLSTMVideoClassifier.model_name + '-history.png')
@@ -100,9 +100,9 @@ from keras_video_classifier.library.recurrent_networks import VGG16Bidirectional
 from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf, scan_ucf
 
 vgg16_include_top = True
-dataset_name = 'UCF-101'
+data_set_name = 'UCF-101'
 data_dir_path = './very_large_data'
-model_dir_path = './models/' + dataset_name 
+model_dir_path = './models/' + data_set_name 
 config_file_path = VGG16BidirectionalLSTMVideoClassifier.get_config_file_path(model_dir_path,
                                                                               vgg16_include_top=vgg16_include_top)
 weight_file_path = VGG16BidirectionalLSTMVideoClassifier.get_weight_file_path(model_dir_path,

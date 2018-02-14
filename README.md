@@ -4,13 +4,13 @@ Keras implementation of video classifiers serving as web
 
 The training data is [UCF101 - Action Recognition Data Set](http://crcv.ucf.edu/data/UCF101.php). 
 Codes are included that will download the UCF101 if they do not exist (due to their large size) in 
-the [keras_video_classifier/demo/very_large_data](keras_video_classifier/demo/very_large_data) folder. The download utility codes can be found in
+the [demo/very_large_data](demo/very_large_data) folder. The download utility codes can be found in
 [keras_video_classifier/library/utility/ucf](keras_video_classifier/library/utility/ucf) directory
 
 The video classifiers are defined and implemented in the  [keras_video_classifier/library](keras_video_classifier/library) directory. 
 
 By default the classifiers are trained using video files inside the dataset "UCF-101" located in 
-[keras_video_classifier/demo/very_large_data](keras_video_classifier/demo/very_large_data) (the videos files will be downloaded if not exist during
+[demo/very_large_data](demo/very_large_data) (the videos files will be downloaded if not exist during
 training). However, the classifiers are generic and can be used to train on any other datasets 
 (just change the data_set_name parameter in its fit() method to other dataset name instead of UCF-101
 will allow it to be trained on other video datasets)
@@ -22,25 +22,25 @@ The opencv-python is used to extract frames from the videos.
 The following deep learning models have been implemented and studied:
 
 * VGG16+LSTM: this approach uses VGG16 to extract features from individual frame of the video, the sequence of frame features are then taken into LSTM recurrent networks for classifier.
-    * training:  [keras_video_classifier/demo/vgg16_lstm_train.py](keras_video_classifier/demo/vgg16_lstm_train.py) 
-    * predictor:  [keras_video_classifier/demo/vgg16_lstm_predict.py](keras_video_classifier/demo/vgg16_lstm_predict.py)
-    * training:  [keras_video_classifier/demo/vgg16_lstm_hi_dim_train.py](keras_video_classifier/demo/vgg16_lstm_hi_dim_train.py) (VGG16 top not included) 
-    * predictor:  [keras_video_classifier/demo/vgg16_lstm_hi_dim_predict.py](keras_video_classifier/demo/vgg16_lstm_hi_dim_predict.py) (VGG16 top not included)
+    * training:  [demo/vgg16_lstm_train.py](demo/vgg16_lstm_train.py) 
+    * predictor:  [demo/vgg16_lstm_predict.py](demo/vgg16_lstm_predict.py)
+    * training:  [demo/vgg16_lstm_hi_dim_train.py](demo/vgg16_lstm_hi_dim_train.py) (VGG16 top not included) 
+    * predictor:  [demo/vgg16_lstm_hi_dim_predict.py](demo/vgg16_lstm_hi_dim_predict.py) (VGG16 top not included)
     
 * VGG16+Bidirectional LSTM: this approach uses VGG16 to extract features from individual frame of the video, the sequence of frame features are then taken into bidirectional LSTM recurrent networks for classifier.
-    * training:  [keras_video_classifier/demo/vgg16_bidirectional_lstm_train.py](keras_video_classifier/demo/vgg16_bidirectional_lstm_train.py) 
-    * predictor:  [keras_video_classifier/demo/vgg16_bidirectional_lstm_predict.py](keras_video_classifier/demo/vgg16_bidirectional_lstm_predict.py)
-    * training:  [keras_video_classifier/demo/vgg16_bidirectional_lstm_hi_dim_train.py](keras_video_classifier/demo/vgg16_bidirectional_lstm_hi_dim_train.py) (VGG16 top not included)
-    * predictor:  [keras_video_classifier/demo/vgg16_bidirectional_lstm_hi_dim_predict.py](keras_video_classifier/demo/vgg16_bidirectional_lstm_hi_dim_predict.py) (VGG16 top not included)
+    * training:  [demo/vgg16_bidirectional_lstm_train.py](demo/vgg16_bidirectional_lstm_train.py) 
+    * predictor:  [demo/vgg16_bidirectional_lstm_predict.py](demo/vgg16_bidirectional_lstm_predict.py)
+    * training:  [demo/vgg16_bidirectional_lstm_hi_dim_train.py](demo/vgg16_bidirectional_lstm_hi_dim_train.py) (VGG16 top not included)
+    * predictor:  [demo/vgg16_bidirectional_lstm_hi_dim_predict.py](demo/vgg16_bidirectional_lstm_hi_dim_predict.py) (VGG16 top not included)
     
 * Convolutional Network: this approach uses stores frames into the "channels" of input of the CNN which then classify the "image" (video frames stacked in the channels)
-    * training: keras_video_classifier/demo/cnn_train.py 
-    * predictor: keras_video_classifier/demo/cnn_predict.py
+    * training: demo/cnn_train.py 
+    * predictor: demo/cnn_predict.py
     
-The trained models are available in the keras_video_classifier/demo/models/UCF-101 folder 
+The trained models are available in the demo/models/UCF-101 folder 
 (Weight files of two of the trained model are not included as they are too big to upload, they are 
-* keras_video_classifier/demo/models/UCF-101/vgg16-lstm-hi-dim-weights.h5
-* keras_video_classifier/demo/models/UCF-101/vgg16-bidirectional-lstm-hi-dim-weights.h5
+* demo/models/UCF-101/vgg16-lstm-hi-dim-weights.h5
+* demo/models/UCF-101/vgg16-bidirectional-lstm-hi-dim-weights.h5
 )
 
 # Usage
@@ -52,7 +52,7 @@ To train a deep learning model, say VGG16BidirectionalLSTMVideoClassifier, run t
 ```bash
 pip install requirements.txt
 
-cd keras_video_classifier/demo
+cd demo
 python vgg16_bidirectional_lstm_train.py 
 ```
 
@@ -86,7 +86,7 @@ plot_and_save_history(history, VGG16BidirectionalLSTMVideoClassifier.model_name,
 
 ```
 
-After the training is completed, the trained models will be saved as cf-v1-*.* in the keras_video_classifier/demo/models.
+After the training is completed, the trained models will be saved as cf-v1-*.* in the demo/models.
 
 ### Predict Video Class Label
 
@@ -138,7 +138,7 @@ for video_file_path in video_file_path_list:
 
 Below is the train history for the VGG16+LSTM (top included for VGG16):
 
-![vgg16-lstm-history](keras_video_classifier/demo/reports/UCF-101/vgg16-lstm-history.png)
+![vgg16-lstm-history](demo/reports/UCF-101/vgg16-lstm-history.png)
 
 The LSTM with VGG16 (top included) feature extractor: (accuracy around 68.9% for training and 55% for validation)
 
@@ -146,7 +146,7 @@ The LSTM with VGG16 (top included) feature extractor: (accuracy around 68.9% for
 
 Below is the train history for the VGG16+Bidirectional LSTM (top included for VGG16):
 
-![vgg16-bidirectional-lstm-history](keras_video_classifier/demo/reports/UCF-101/vgg16-bidirectional-lstm-history.png)
+![vgg16-bidirectional-lstm-history](demo/reports/UCF-101/vgg16-bidirectional-lstm-history.png)
 
 The bidirectional LSTM with VGG16 (top included) feature extractor: (accuracy around 89% for training and 77% for validation)
 
@@ -154,7 +154,7 @@ The bidirectional LSTM with VGG16 (top included) feature extractor: (accuracy ar
 
 Below is the train history for the VGG16+LSTM (top not included for VGG16):
 
-![vgg16-lstm-history](keras_video_classifier/demo/reports/UCF-101/vgg16-lstm-hi-dim-history.png)
+![vgg16-lstm-history](demo/reports/UCF-101/vgg16-lstm-hi-dim-history.png)
 
 The LSTM with VGG16 (top not included)feature extractor: (accuracy around 100% for training and 98.83% for validation)
 
@@ -162,7 +162,7 @@ The LSTM with VGG16 (top not included)feature extractor: (accuracy around 100% f
 
 Below is the train history for the VGG16+LSTM (top not included for VGG16):
 
-![vgg16-lstm-history](keras_video_classifier/demo/reports/UCF-101/vgg16-bidirectional-lstm-hi-dim-history.png)
+![vgg16-lstm-history](demo/reports/UCF-101/vgg16-bidirectional-lstm-hi-dim-history.png)
 
 The LSTM with VGG16 (top not included) feature extractor: (accuracy around 100% for training and 98.57% for validation)
 
@@ -171,6 +171,6 @@ The LSTM with VGG16 (top not included) feature extractor: (accuracy around 100% 
 
 Below is the train history for the Convolutional Network:
 
-![cnn-history](keras_video_classifier/demo/reports/UCF-101/cnn-history.png)
+![cnn-history](demo/reports/UCF-101/cnn-history.png)
 
 The Convolutional Network: (accuracy around 22.73% for training and 28.75% for validation)

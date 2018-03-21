@@ -26,10 +26,17 @@ def main():
     video_file_path_list = np.array([file_path for file_path in videos.keys()])
     np.random.shuffle(video_file_path_list)
 
+    correct_count = 0
+    count = 0
+
     for video_file_path in video_file_path_list:
         label = videos[video_file_path]
         predicted_label = predictor.predict(video_file_path)
         print('predicted: ' + predicted_label + ' actual: ' + label)
+        correct_count = correct_count + 1 if label == predicted_label else correct_count
+        count += 1
+        accuracy = correct_count / count
+        print('accuracy: ', accuracy)
 
 
 if __name__ == '__main__':

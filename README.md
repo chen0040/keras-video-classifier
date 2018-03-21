@@ -123,10 +123,54 @@ videos = scan_ucf(data_dir_path, predictor.nb_classes)
 video_file_path_list = np.array([file_path for file_path in videos.keys()])
 np.random.shuffle(video_file_path_list)
 
+correct_count = 0
+count = 0
+
 for video_file_path in video_file_path_list:
     label = videos[video_file_path]
     predicted_label = predictor.predict(video_file_path)
     print('predicted: ' + predicted_label + ' actual: ' + label)
+    correct_count = correct_count + 1 if label == predicted_label else correct_count
+    count += 1
+    accuracy = correct_count / count
+    print('accuracy: ', accuracy)
+```
+
+Below shows the print out of [demo/vgg16_bidirectional_lstm_predict.py](demo/vgg16_bidirectional_lstm_predict.py) 
+towards the end of its execution:
+
+```text
+predicted: Biking actual: Biking
+accuracy:  0.8593481989708405
+Extracting frames from video:  ./very_large_data/UCF-101\Billiards\v_Billiards_g24_c01.avi
+predicted: Billiards actual: Billiards
+accuracy:  0.8595890410958904
+Extracting frames from video:  ./very_large_data/UCF-101\BabyCrawling\v_BabyCrawling_g22_c06.avi
+predicted: BabyCrawling actual: BabyCrawling
+accuracy:  0.8598290598290599
+Extracting frames from video:  ./very_large_data/UCF-101\Bowling\v_Bowling_g13_c01.avi
+predicted: Bowling actual: Bowling
+accuracy:  0.8600682593856656
+Extracting frames from video:  ./very_large_data/UCF-101\BalanceBeam\v_BalanceBeam_g24_c04.avi
+predicted: BalanceBeam actual: BalanceBeam
+accuracy:  0.8603066439522998
+Extracting frames from video:  ./very_large_data/UCF-101\BrushingTeeth\v_BrushingTeeth_g12_c02.avi
+predicted: BrushingTeeth actual: BrushingTeeth
+accuracy:  0.8605442176870748
+Extracting frames from video:  ./very_large_data/UCF-101\BasketballDunk\v_BasketballDunk_g04_c01.avi
+predicted: BasketballDunk actual: BasketballDunk
+accuracy:  0.8607809847198642
+Extracting frames from video:  ./very_large_data/UCF-101\Bowling\v_Bowling_g04_c03.avi
+predicted: BenchPress actual: Bowling
+accuracy:  0.8593220338983051
+Extracting frames from video:  ./very_large_data/UCF-101\BaseballPitch\v_BaseballPitch_g19_c01.avi
+predicted: BaseballPitch actual: BaseballPitch
+accuracy:  0.8595600676818951
+Extracting frames from video:  ./very_large_data/UCF-101\Archery\v_Archery_g18_c03.avi
+predicted: Archery actual: Archery
+accuracy:  0.8597972972972973
+Extracting frames from video:  ./very_large_data/UCF-101\Bowling\v_Bowling_g19_c03.avi
+...
 ```
 
 # Evaluation

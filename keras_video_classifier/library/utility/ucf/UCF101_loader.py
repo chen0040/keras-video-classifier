@@ -52,6 +52,23 @@ def scan_ucf(data_dir_path, limit):
     return result
 
 
+def scan_ucf_with_classes(data_dir_path, labels_word2idx):
+    input_data_dir_path = data_dir_path + '/UCF-101'
+
+    result = dict()
+
+    dir_count = 0
+    for (label, label_index) in labels_word2idx:
+        file_path = input_data_dir_path + os.path.sep + label
+        if not os.path.isfile(file_path):
+            dir_count += 1
+            for ff in os.listdir(file_path):
+                video_file_path = file_path + os.path.sep + ff
+                result[video_file_path] = label
+    return result
+
+
+
 def load_ucf(data_dir_path):
     UFC101_data_dir_path = data_dir_path + "/UCF-101"
     if not os.path.exists(UFC101_data_dir_path):

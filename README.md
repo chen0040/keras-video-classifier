@@ -97,7 +97,7 @@ To use the trained deep learning model to predict the class label of a video, yo
 import numpy as np
 
 from keras_video_classifier.library.recurrent_networks import VGG16BidirectionalLSTMVideoClassifier
-from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf, scan_ucf
+from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf, scan_ucf_with_labels
 
 vgg16_include_top = True
 data_set_name = 'UCF-101'
@@ -118,7 +118,7 @@ predictor.load_model(config_file_path, weight_file_path)
 
 # scan_ucf returns a dictionary object of (video_file_path, video_class_label) where video_file_path
 # is the key and video_class_label is the value
-videos = scan_ucf(data_dir_path, predictor.nb_classes)
+videos = scan_ucf_with_labels(data_dir_path, [label for (label, label_index) in predictor.labels.items()])
 
 video_file_path_list = np.array([file_path for file_path in videos.keys()])
 np.random.shuffle(video_file_path_list)

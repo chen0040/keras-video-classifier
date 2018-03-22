@@ -1,7 +1,7 @@
 import numpy as np
 
 from keras_video_classifier.library.recurrent_networks import VGG16BidirectionalLSTMVideoClassifier
-from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf, scan_ucf_with_classes
+from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf, scan_ucf_with_labels
 
 
 def main():
@@ -21,7 +21,7 @@ def main():
     predictor = VGG16BidirectionalLSTMVideoClassifier()
     predictor.load_model(config_file_path, weight_file_path)
 
-    videos = scan_ucf_with_classes(data_dir_path, predictor.labels)
+    videos = scan_ucf_with_labels(data_dir_path, [label for (label, label_index) in predictor.labels.items()])
 
     video_file_path_list = np.array([file_path for file_path in videos.keys()])
     np.random.shuffle(video_file_path_list)

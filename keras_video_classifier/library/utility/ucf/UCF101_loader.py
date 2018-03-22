@@ -52,13 +52,13 @@ def scan_ucf(data_dir_path, limit):
     return result
 
 
-def scan_ucf_with_classes(data_dir_path, labels_word2idx):
+def scan_ucf_with_labels(data_dir_path, labels):
     input_data_dir_path = data_dir_path + '/UCF-101'
 
     result = dict()
 
     dir_count = 0
-    for (label, label_index) in labels_word2idx:
+    for label in labels:
         file_path = input_data_dir_path + os.path.sep + label
         if not os.path.isfile(file_path):
             dir_count += 1

@@ -121,17 +121,14 @@ class VGG16BidirectionalLSTMVideoClassifier(object):
         predicted_label = self.labels_idx2word[predicted_class]
         return predicted_label
 
-    def fit(self, data_dir_path, model_dir_path, vgg16_include_top=None, data_set_name=None):
-        if vgg16_include_top is None:
-            vgg16_include_top = True
-        if data_set_name is None:
-            data_set_name = 'UCF-101'
+    def fit(self, data_dir_path, model_dir_path, vgg16_include_top=True, data_set_name='UCF-101', test_size=0.3,
+            random_state=42):
 
         self.vgg16_include_top = vgg16_include_top
 
-        config_file_path = VGG16BidirectionalLSTMVideoClassifier.get_config_file_path(model_dir_path, vgg16_include_top)
-        weight_file_path = VGG16BidirectionalLSTMVideoClassifier.get_weight_file_path(model_dir_path, vgg16_include_top)
-        architecture_file_path = VGG16BidirectionalLSTMVideoClassifier.get_architecture_file_path(model_dir_path, vgg16_include_top)
+        config_file_path = self.get_config_file_path(model_dir_path, vgg16_include_top)
+        weight_file_path = self.get_weight_file_path(model_dir_path, vgg16_include_top)
+        architecture_file_path = self.get_architecture_file_path(model_dir_path, vgg16_include_top)
 
         self.vgg16_model = VGG16(include_top=self.vgg16_include_top, weights='imagenet')
         self.vgg16_model.compile(optimizer=SGD(), loss='categorical_crossentropy', metrics=['accuracy'])
@@ -189,7 +186,8 @@ class VGG16BidirectionalLSTMVideoClassifier(object):
         model = self.create_model()
         open(architecture_file_path, 'w').write(model.to_json())
 
-        Xtrain, Xtest, Ytrain, Ytest = train_test_split(x_samples, y_samples, test_size=0.3, random_state=42)
+        Xtrain, Xtest, Ytrain, Ytest = train_test_split(x_samples, y_samples, test_size=test_size,
+                                                        random_state=random_state)
 
         train_gen = generate_batch(Xtrain, Ytrain)
         test_gen = generate_batch(Xtest, Ytest)
@@ -291,17 +289,12 @@ class VGG16LSTMVideoClassifier(object):
         predicted_label = self.labels_idx2word[predicted_class]
         return predicted_label
 
-    def fit(self, data_dir_path, model_dir_path, vgg16_include_top=None, data_set_name=None):
-        if vgg16_include_top is None:
-            vgg16_include_top = True
-        if data_set_name is None:
-            data_set_name = 'UCF-101'
-
+    def fit(self, data_dir_path, model_dir_path, vgg16_include_top=True, data_set_name='UCF-101', test_size=0.3, random_state=42):
         self.vgg16_include_top = vgg16_include_top
 
-        config_file_path = VGG16LSTMVideoClassifier.get_config_file_path(model_dir_path, vgg16_include_top)
-        weight_file_path = VGG16LSTMVideoClassifier.get_weight_file_path(model_dir_path, vgg16_include_top)
-        architecture_file_path = VGG16LSTMVideoClassifier.get_architecture_file_path(model_dir_path, vgg16_include_top)
+        config_file_path = self.get_config_file_path(model_dir_path, vgg16_include_top)
+        weight_file_path = self.get_weight_file_path(model_dir_path, vgg16_include_top)
+        architecture_file_path = self.get_architecture_file_path(model_dir_path, vgg16_include_top)
 
         vgg16_model = VGG16(include_top=self.vgg16_include_top, weights='imagenet')
         vgg16_model.compile(optimizer=SGD(), loss='categorical_crossentropy', metrics=['accuracy'])
@@ -360,7 +353,8 @@ class VGG16LSTMVideoClassifier(object):
         model = self.create_model()
         open(architecture_file_path, 'w').write(model.to_json())
 
-        Xtrain, Xtest, Ytrain, Ytest = train_test_split(x_samples, y_samples, test_size=0.3, random_state=42)
+        Xtrain, Xtest, Ytrain, Ytest = train_test_split(x_samples, y_samples, test_size=test_size,
+                                                        random_state=random_state)
 
         train_gen = generate_batch(Xtrain, Ytrain)
         test_gen = generate_batch(Xtest, Ytest)

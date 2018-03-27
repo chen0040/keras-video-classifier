@@ -111,17 +111,13 @@ class CnnVideoClassifier(object):
         predicted_label = self.labels_idx2word[predicted_class]
         return predicted_label
 
-    def fit(self, data_dir_path, model_dir_path, epochs=None, data_set_name=None, max_frames=None):
-        if epochs is None:
-            epochs = NUM_EPOCHS
-        if max_frames is None:
-            max_frames = 10
-        if data_set_name is None:
-            data_set_name = 'UCF-101'
+    def fit(self, data_dir_path, model_dir_path, epochs=NUM_EPOCHS, data_set_name='UCF-101', max_frames=10,
+            test_size=0.3,
+            random_state=42):
 
-        config_file_path = CnnVideoClassifier.get_config_file_path(model_dir_path)
-        weight_file_path = CnnVideoClassifier.get_weight_file_path(model_dir_path)
-        architecture_file_path = CnnVideoClassifier.get_architecture_file_path(model_dir_path)
+        config_file_path = self.get_config_file_path(model_dir_path)
+        weight_file_path = self.get_weight_file_path(model_dir_path)
+        architecture_file_path = self.get_architecture_file_path(model_dir_path)
 
         self.labels = dict()
         x_samples, y_samples = scan_and_extract_videos_for_conv2d(data_dir_path,
@@ -174,7 +170,8 @@ class CnnVideoClassifier(object):
                                   nb_classes=self.nb_classes)
         open(architecture_file_path, 'w').write(model.to_json())
 
-        Xtrain, Xtest, Ytrain, Ytest = train_test_split(x_samples, y_samples, test_size=0.3, random_state=42)
+        Xtrain, Xtest, Ytrain, Ytest = train_test_split(x_samples, y_samples, test_size=test_size,
+                                                        random_state=random_state)
 
         train_gen = generate_batch(Xtrain, Ytrain)
         test_gen = generate_batch(Xtest, Ytest)

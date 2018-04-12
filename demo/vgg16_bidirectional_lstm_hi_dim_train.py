@@ -1,17 +1,21 @@
 import numpy as np
 from keras import backend as K
-from keras_video_classifier.library.recurrent_networks import VGG16BidirectionalLSTMVideoClassifier
-from keras_video_classifier.library.utility.plot_utils import plot_and_save_history
-from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf
-
-K.set_image_dim_ordering('tf')
+import sys
+import os
 
 
 def main():
+    K.set_image_dim_ordering('tf')
+    sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+    from keras_video_classifier.library.recurrent_networks import VGG16BidirectionalLSTMVideoClassifier
+    from keras_video_classifier.library.utility.plot_utils import plot_and_save_history
+    from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf
+
     data_set_name = 'UCF-101'
-    input_dir_path = './very_large_data'
-    output_dir_path = './models/' + data_set_name
-    report_dir_path = './reports/' + data_set_name
+    input_dir_path = os.path.join(os.path.dirname(__file__), 'very_large_data')
+    output_dir_path = os.path.join(os.path.dirname(__file__), 'models', data_set_name)
+    report_dir_path = os.path.join(os.path.dirname(__file__), 'reports', data_set_name)
 
     np.random.seed(42)
 

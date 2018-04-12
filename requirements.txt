@@ -1,9 +1,9 @@
-keras
-numpy
-h5py
+keras==2.1.2
+numpy==1.13.3
+h5py==2.7.1
 pillow
 patool
 opencv-python
 scikit-learn
-tensorflow
+tensorflow==1.4.0
 matplotlib

@@ -24,6 +24,8 @@ def main():
     predictor = VGG16BidirectionalLSTMVideoClassifier()
     predictor.load_model(config_file_path, weight_file_path)
 
+    print('reaching here three')
+
     videos = scan_ucf_with_labels(data_dir_path, [label for (label, label_index) in predictor.labels.items()])
 
     video_file_path_list = np.array([file_path for file_path in videos.keys()])

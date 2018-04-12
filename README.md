@@ -50,7 +50,7 @@ The trained models are available in the demo/models/UCF-101 folder
 To train a deep learning model, say VGG16BidirectionalLSTMVideoClassifier, run the following commands:
 
 ```bash
-pip install requirements.txt
+pip install -r requirements.txt
 
 cd demo
 python vgg16_bidirectional_lstm_train.py 

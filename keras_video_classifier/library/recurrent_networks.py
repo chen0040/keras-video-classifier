@@ -7,7 +7,7 @@ from keras import backend as K
 from keras.utils import np_utils
 from sklearn.model_selection import train_test_split
 from keras.callbacks import ModelCheckpoint
-
+import os
 import numpy as np
 
 from keras_video_classifier.library.utility.frame_extractors.vgg16_feature_extractor import extract_vgg16_features_live, \
@@ -91,6 +91,10 @@ class VGG16BidirectionalLSTMVideoClassifier(object):
             return model_dir_path + '/' + VGG16BidirectionalLSTMVideoClassifier.model_name + '-hi-dim-architecture.json'
 
     def load_model(self, config_file_path, weight_file_path):
+        if os.path.exists(config_file_path):
+            print('loading configuration from ', config_file_path)
+        else:
+            raise ValueError('cannot locate config file {}'.format(config_file_path))
 
         config = np.load(config_file_path).item()
         self.num_input_tokens = config['num_input_tokens']
@@ -102,8 +106,14 @@ class VGG16BidirectionalLSTMVideoClassifier(object):
         self.config = config
 
         self.model = self.create_model()
+        if os.path.exists(weight_file_path):
+            print('loading network weights from ', weight_file_path)
+        else:
+            raise ValueError('cannot local weight file {}'.format(weight_file_path))
+
         self.model.load_weights(weight_file_path)
 
+        print('build vgg16 with pre-trained model')
         vgg16_model = VGG16(include_top=self.vgg16_include_top, weights='imagenet')
         vgg16_model.compile(optimizer=SGD(), loss='categorical_crossentropy', metrics=['accuracy'])
         self.vgg16_model = vgg16_model

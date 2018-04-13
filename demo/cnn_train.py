@@ -1,12 +1,16 @@
 import numpy as np
 from keras import backend as K
-
+import os
 from keras_video_classifier.library.utility.plot_utils import plot_and_save_history
 
 from keras_video_classifier.library.convolutional import CnnVideoClassifier
 from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf
 
 K.set_image_dim_ordering('tf')
+
+
+def patch_path(path):
+    return os.path.join(os.path.dirname(__file__), path)
 
 
 def main():

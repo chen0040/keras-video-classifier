@@ -1,15 +1,23 @@
 import numpy as np
 from keras import backend as K
-
-from keras_video_classifier.library.convolutional import CnnVideoClassifier
-from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf, scan_ucf_with_labels
+import os
+import sys
 
 K.set_image_dim_ordering('tf')
 
 
+def patch_path(path):
+    return os.path.join(os.path.dirname(__file__), path)
+
+
 def main():
-    data_dir_path = './very_large_data'
-    model_dir_path = './models/UCF-101'
+    sys.path.append(patch_path('..'))
+
+    data_dir_path = patch_path('very_large_data')
+    model_dir_path = patch_path('models/UCF-101')
+
+    from keras_video_classifier.library.convolutional import CnnVideoClassifier
+    from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf, scan_ucf_with_labels
     config_file_path = CnnVideoClassifier.get_config_file_path(model_dir_path)
     weight_file_path = CnnVideoClassifier.get_weight_file_path(model_dir_path)
 

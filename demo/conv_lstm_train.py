@@ -1,7 +1,3 @@
-""" This script demonstrates the use of a convolutional LSTM network.
-This network is used to predict the next frame of an artificially
-generated movie which contains moving squares.
-"""
 from keras.layers.convolutional_recurrent import ConvLSTM2D
 from keras.layers.normalization import BatchNormalization
 
@@ -17,10 +13,16 @@ import numpy as np
 from keras_video_classifier.library.utility.ucf.UCF101_loader import load_ucf
 from keras_video_classifier.library.utility import scan_and_extract_features, MAX_NB_CLASSES
 from sklearn.model_selection import train_test_split
+import os
+
 
 BATCH_SIZE = 8
 NUM_EPOCHS = 20
 VERBOSE = 1
+
+
+def patch_path(path):
+    return os.path.join(os.path.dirname(__file__), path)
 
 
 def generate_batch(x_samples, y_samples):
@@ -34,8 +36,8 @@ def generate_batch(x_samples, y_samples):
 
 
 def main():
-    data_dir_path = './very_large_data'
-    model_dir_path = './models/UCF-101'
+    data_dir_path = patch_path('very_large_data')
+    model_dir_path = patch_path('models/UCF-101')
     weight_file_path = model_dir_path + '/conv3d-weights.h5'
     architecture_file_path = model_dir_path + '/conv3d-architecture.json'
     nb_classes = MAX_NB_CLASSES

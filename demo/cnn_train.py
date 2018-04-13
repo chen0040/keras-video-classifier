@@ -15,9 +15,9 @@ def patch_path(path):
 
 def main():
     data_set_name = 'UCF-101'
-    input_dir_path = './very_large_data'
-    output_dir_path = './models/' + data_set_name
-    report_dir_path = './reports/' + data_set_name
+    input_dir_path = patch_path('very_large_data')
+    output_dir_path = patch_path('models/' + data_set_name)
+    report_dir_path = patch_path('reports/' + data_set_name)
 
     np.random.seed(42)
 
